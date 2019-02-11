@@ -10,12 +10,12 @@
 		$config['dbuser']='root';
 		$config['dbpass'] ='';
 	}else{
-		define("BASE_URL", "http://intranet.acoreconsumiveis.com.br");
-		define("DB_NAME","u175549069_02");
+		define("BASE_URL", "http://localhost/darwin");
+		define("DB_NAME","darwin");
 		$config['dbname'] = DB_NAME;
 		$config['host']='localhost';
-		$config['dbuser']='u175549069_02';
-		$config['dbpass'] ='Acore20663';
+		$config['dbuser']='root';
+		$config['dbpass'] ='';
 	}
 
 	global $db;

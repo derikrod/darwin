@@ -78,7 +78,7 @@ class model{
 
 	//construtor de formulários
 	//1.selects
-	public function get_select($table,$key,$required="",$value = 0)
+	private function get_select($table,$key,$required="",$value = 0)
 	{
 		$this -> query("SELECT * FROM ".$table);
 		$select = '<select name="'.$key.'" id="'.$key.'" '.$required.'><option value="">Selecione uma opção.</option>';
@@ -91,7 +91,7 @@ class model{
 		return $select;
 	}
 	//2.checkbox
-	function get_checkbox($table,$name,$required="",$checked = 0){
+	private function get_checkbox($table,$name,$required="",$checked = 0){
 		$this-> query("SELECT * FROM".$table);
 		$checkbox = "";
 		$i = 0;
@@ -104,7 +104,7 @@ class model{
 		}
 	}
 	//3.radios
-	public function get_radio($table,$name,$required="",$checked = 0)
+	private function get_radio($table,$name,$required="",$checked = 0)
 	{
 		$this -> query("SELECT * FROM $table");
 		$radio = "";
@@ -119,7 +119,7 @@ class model{
 		return $radio;
 	}
 	//construindo inputs
-	public function get_input($key,$name,$required="",$value="")
+	private function get_input($key,$name,$required="",$value="")
 	{	
 		$input  = "";
 		switch ($key) {

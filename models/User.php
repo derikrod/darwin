@@ -35,5 +35,15 @@
 				return false;
 			}	
 		}
+
+		public function getIdByname($name){
+			$sql = "SELECT FROM users WHERE txt_login ='".$name."'";
+			$this -> query($sql);
+			$id = 0;
+			foreach ($this-> result() as $key => $value) {
+				$id = $value["id"];			
+			}
+			return $id;
+		}	
 	}
  ?>

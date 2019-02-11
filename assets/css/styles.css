@@ -1,0 +1,24 @@
+.row{
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#log_div{
+	background-image: url('../images/bg1.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color:#ccc; padding-top: 150px;padding-bottom: 150px;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+
+}
+
+#log_intra_div{
+	background-color: white;min-height: 320px;box-shadow: 2px 2px 2px #666;
+
+}
+
+#error_display{
+  color:red;
+}

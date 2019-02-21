@@ -75,15 +75,23 @@ class model{
 		}
 	}
 
-
+	private function ptBRdate($date)
+	{
+		$split_date = explode('-', $date);
+		return $split_date[2]."/".$split_date[1]."/".$split_date[0];
+	}
 	//construtor de formulários
 	//1.selects
-	private function get_select($table,$key,$required="",$value = 0)
+	private function get_select($table,$key,$required="",$selected = 0)
 	{
 		$this -> query("SELECT * FROM ".$table);
-		$select = '<select name="'.$key.'" id="'.$key.'" '.$required.'><option value="">Selecione uma opção.</option>';
+		$select = '<select name="'.$key.'" id="'.$key.'" '.$required.' class="form-control"><option value="">Selecione uma opção.</option>';
 		foreach ($this->result() as $key => $value) {
-			$select .= 	'<option value="'.$value['id'].'">'.utf8_encode($value['txt_name']).'</option>';
+			$selected_input ="";
+			if ($value['id'] == $selected) {
+				$selected_input = 'selected = "selected"';
+			}
+			$select .= 	'<option value="'.$value['id'].'" '.$selected_input.'>'.utf8_encode($value['txt_name']).'</option>';
 		}
 
 		$select.='</select>';
@@ -113,7 +121,7 @@ class model{
 			if ($value['id'] == $checked) {
 				$selected = 'checked = "checked"';
 			}
-			$radio .= '<label for="'.$name.$i.'">'.utf8_encode($value['txt_name']).'</label><input type="radio" name="'.$name.'" id="'.$name.'" '.$selected.' value="'.$value["id"].'" '.$required.'>';
+			$radio .= '<label for="'.$name.$i.'">'.utf8_encode($value['txt_name']).'</label><input type="radio" name="'.$name.'" id="'.$name.'" '.$checked.' value="'.$value["id"].'" '.$required.'>';
 		}
 
 		return $radio;
@@ -134,15 +142,15 @@ class model{
 				break;
 			case 'sel':
 				$spliname = explode('_', $name);
-				$input = $this-> get_select($spliname[1],$name);	
+				$input = $this-> get_select($spliname[1],$name,$required,$value);	
 				break;
 			case 'chk':
 				$spliname = explode('_', $name);
-				$input = $this-> get_checkbox($spliname[1],$name);	
+				$input = $this-> get_checkbox($spliname[1],$name,$required,$value);	
 				break;
 			case 'rdo':
 				$spliname = explode('_', $name);
-				$input = $this-> get_radio($spliname[1],$name);	
+				$input = $this-> get_radio($spliname[1],$name,$required,$value);	
 				break;	
 			case 'tel':
 				$input = '<input type="text" name="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control phone" >';	
@@ -184,65 +192,168 @@ class model{
 			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
 			return $form;
 		}else{
-			$sql = "SELECT * FROM ".$table." WHERE id =".$id;
-			$this -> query($sql);
-			$form = '<form  id="update_'.$table.'">';
-			foreach ($this->result() as $key => $value) {
-				$split_key = explode('_', $key);
-				if ($value['COLUMN_NAME'] != 'id') {	
-				$form .= '<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>"'.$this-> get_input($split_key[0],$value['COLUMN_NAME']).'"</div>';	
-				}
+			$sql = "SELECT * FROM ".$table." WHERE id = ".$id;
+			$this->query($sql);
+			$form = '<form  id="update_'.$table.'" data-path="'.BASE_URL.'"" data-id="'.$id.'" data-table="'.$table.'">';
+			$list = '<ul>';
+			$res = $this -> result();
+			foreach ($res[0] as $key => $value) {
+				$sql_label = "";
+				if(!is_numeric($key) && $key != 'id' && substr($key, 0,3) != 'psw'){
+				 	$sql_label = "SELECT COLUMN_COMMENT,IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table."' AND COLUMN_NAME ='".$key."' ;";
+				 		$this-> query($sql_label);
+				 		$res = $this->result();
+				 		$required = "";
+				 		if ($res[0]['IS_NULLABLE'] == 'NO') {
+				 			$required = "required";
+				 		}
+				 		$form .= '<div class="form-group"><label for="'.$key.'">'.utf8_encode($res[0][0]).'</label>'.$this->get_input(substr($key, 0,3),$key,$required,$value).'</div>';
+				 		$list .= '<li>'.$sql_label.'</li>';
+				 }
+				
+				
 			}
-
-			$form.='<div class="text-center"><input type="submit" value="'.$submit_text.'"></div></form>';
-			return $form;
+			$list .= '</ul>';
+			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'">&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" id="remove_btn" data-id="'.$id.'" data-path="'.BASE_URL.'" data-table="'.$table.'">Rmover</button></div> </form>';
+			return $form;	
 		}
 		
 	}
 
 	//criador de formulários com campos específicos
-	public function getSmForm($fields = array(),$table,$submit_text)
-		{
-			$form = '<form id="login_form" data-path='.BASE_URL.'><span id="error_display"></span>';
-			foreach ($fields as $key => $value) {
-				$fields[$key] = "COLUMN_NAME = '".$value."'";
-			}
-
-			$sql_fields = implode(' OR ', $fields);
-
-			$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'darwin' AND TABLE_NAME = 'users' AND (".$sql_fields.")";
-
-			$this -> query($sql);
-			foreach ($this->result() as $key => $value) {
-				$required = "";
-				if ($value['IS_NULLABLE'] == 'NO') {
-					$required = "required";
-				}
-				$split_key = explode('_', $value['COLUMN_NAME']);
-				$form .='<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
-			}
-
-			$form .= '<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
-
-			return $form;
+	public function getSmForm($fields = array(),$table,$submit_text,$form_name)
+	{
+		$form = '<form id="'.$form_name.'_form" data-path='.BASE_URL.'><span id="error_display" class="text-center"></span>';
+		foreach ($fields as $key => $value) {
+			$fields[$key] = "COLUMN_NAME = '".$value."'";
 		}
 
+		$sql_fields = implode(' OR ', $fields);
 
+		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'darwin' AND TABLE_NAME = '".$table."' AND (".$sql_fields.")";
+
+		$this -> query($sql);
+		foreach ($this->result() as $key => $value) {
+			$required = "";
+			if ($value['IS_NULLABLE'] == 'NO') {
+				$required = "required";
+			}
+			$split_key = explode('_', $value['COLUMN_NAME']);
+			$form .='<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
+		}
+
+		$form .= '<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
+
+		return $form;
+	}
+
+	//contador de registros
+	public function countRegisters($table,$condition  = array(),$where_cond ="AND")
+	{
+		if (count($condition) == 0) {
+			$sql = "SELECT * FROM ".$table;
+			$this-> query($sql);
+			return $this->numRows();
+		}else{
+			foreach ($condition as $key => $value) {
+				$condition[$key] = $key ." = '".$value."'";
+			}
+			$rule = implode($where_cond, $condition);
+
+			$sql = "SELECT * FROM ".$table." WHERE ".$rule;
+			$this -> query($sql);
+			return  $this->numRows();
+		}
+	}
 
 	//criador de tabelas 
-	public function createTable($table)
+	public function get_options($key,$value)
 	{
-		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table."';";
+		$split_key = explode('_', $key);
+		$sql ="SELECT * FROM ".$split_key[1]." WHERE id = ".$value;
+		$option = "";
+		$this -> query($sql);
+		foreach ($this->result() as $key => $value) {
+			$option = $value["txt_name"];
+		}
+
+		return utf8_encode($option);
+	}
+	public function createTable($table_name,$condition = array(),$where_cond = 'AND')
+	{
+		$table = "";
+		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table_name."';";
 		$this-> query($sql);
 		$table ='<table class="table" id="'.$table.'_table"><thead>';
 	 
 		foreach ($this->result() as $key => $value) {
-			$table .=  '<th>'.$value['COLUMN_COMMENT'].'</th>';
+			if ($value['COLUMN_COMMENT'] != "") {
+				$table .=  '<th>'.utf8_encode($value['COLUMN_COMMENT']).'</th>';
+			}	
 		}
 
 		$table .= '</thead><tbody>';
-		
+		$conditional = "";
+		if (count($condition)>0) {
+			foreach ($condition as $key => $value) {
+				$condition[$key] = $key." = '".$value."'";
 
+			}
+			$conditional = implode($where_cond, $condition);
+		}
+		$sql = "SELECT * FROM ".$table_name." ".$conditional;
+		$this-> query($sql);
+		$res = array();
+		$i=0;
+		foreach ($this->result() as $key => $value) {
+			$res[$i] = $value;
+			$i++;
+		}
+		
+		foreach ($res as $key => $intraarray) {
+			$table .= '<tr class="inform-row" data-table="'.$table_name.'" data-id="'.$intraarray['id'].'" data-path="'.BASE_URL.'">';
+			foreach ($intraarray as $key => $value) {
+				if (!is_numeric($key) && $key != 'id' && substr($key,0, 3)!='non') {
+					if (substr($key,0, 3) == 'sel') {
+					 	$table .= "<td>".$this->get_options($key,$value) ."</td>";
+					}elseif (substr($key,0, 3) == 'dat') {
+						$table .= "<td>".$this->ptBRdate($value)."</td>";
+					}else{
+						$table .= "<td>".$value."</td>";
+					}
+					
+				}
+				
+			}
+			$table.= '</tr>';
+		}
+		$table .= "</tbody></table>";
+
+		return $table;
+	}
+
+
+	public function check_modules($idmodule,$iduser)
+	{
+		$department = 0;
+		$permissions = array();
+		$sql_module = "SELECT * FROM modules WHERE id = ".$idmodule;
+		$this ->query($sql_module);
+		foreach ($this->result() as $key => $value) {
+			$permissions = explode(',', $value["permissions"]);
+		}
+
+		$sql_user = "SELECT * FROM users WHERE id = ".$iduser;
+		$this ->query($sql_user);
+		foreach ($this-> result() as $key => $value) {
+			$department = $value["sel_departments"];
+		}
+
+		if (in_array($department, $permissions)) {
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 }

@@ -1,6 +1,6 @@
 .row{
-  margin-right: 0;
-  margin-left: 0;
+  margin-right: 0!important;
+  margin-left: 0!important;
 }
 
 #log_div{
@@ -15,10 +15,64 @@
 }
 
 #log_intra_div{
-	background-color: white;min-height: 320px;box-shadow: 2px 2px 2px #666;
+	background-color:#F8FBF7;min-height: 320px;box-shadow: 2px 2px 2px #666;
 
 }
 
 #error_display{
   color:red;
+}
+
+
+.main-body{
+    background: #D1DED8;
+}
+
+.module-div{
+  background-color:#F8FBF7;
+  box-shadow: 3px 3px 3px #222;
+  height: 250px;
+}
+
+.navbar-default {
+    background-color: #172A3A!important;
+    border:0;
+    color:#F0F7EE!important;
+}
+
+.navbar-default .navbar-text {
+    color:#F0F7EE!important;
+}
+
+.btn-success{
+  background-color: #89C26C!important;
+  border:0 !important;
+  text-transform: uppercase;
+}
+
+.btn-danger{
+  background-color: #D64E42!important;
+  border:0 !important;
+  text-transform: uppercase;
+}
+
+.btn-danger:hover{
+  background-color: #C54E42!important;
+}
+.btn-success:hover{
+  background-color: #7DB163!important;
+  border:0 !important;
+}
+
+.navbar-default .navbar-brand {
+     color:#F0F7EE!important;
+     border:0!important;
+}
+
+#logout_btn{
+  color:#D64E42;
+}
+.inform-row:hover{
+  cursor: pointer;
+  background-color: #D1DED8;
 }

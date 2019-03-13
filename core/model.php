@@ -138,7 +138,7 @@ class model{
 				$input = '<input type="password" id="'.$name.'" name="'.$name.'" value="'.$value.'" class="form-control" '.$required.'>';
 				break;
 			case 'lgtxt':
-				$input = '<textarea name="'.$name.'" id="'.$name.'" cols="30" rows="10" class="form-control" '.$required.'>"'.$value.'"</textarea>';	
+				$input = '<textarea name="'.$name.'" id="'.$name.'" cols="30" rows="10" class="form-control" '.$required.'>'.$value.'</textarea>';	
 				break;
 			case 'sel':
 				$spliname = explode('_', $name);
@@ -161,6 +161,9 @@ class model{
 			case 'hrs':
 				$input = '<input type="text" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control hours">';
 				break;
+			case 'eml':
+				$input = '<input type="email" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control">';
+				break;	
 			default:
 				$input = "";
 				break;		
@@ -169,7 +172,7 @@ class model{
 		return $input;
 	}
 	//criando formulário
-	public function createForm($table,$submit_text,$id=0)
+	public function createForm($table,$submit_text,$id=0,$hiddens =array())
 	{
 		$form = "";
 
@@ -184,11 +187,15 @@ class model{
 					$required = "required";
 				}
 				$split_key = explode('_', $value['COLUMN_NAME']);
-				if ($value['COLUMN_NAME'] != 'id') {
+				if ($value['COLUMN_NAME'] != 'id' && $split_key[0] != 'non') {
 					$form .= '<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
 				}	
 			}
-
+			if (count($hiddens) > 0) {
+				foreach ($hiddens as $key => $value) {
+					$form.= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
+				}
+			}
 			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
 			return $form;
 		}else{
@@ -284,7 +291,7 @@ class model{
 		$table = "";
 		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table_name."';";
 		$this-> query($sql);
-		$table ='<table class="table" id="'.$table.'_table"><thead>';
+		$table ='<table class="table" id="'.$table_name.'_table"><thead>';
 	 
 		foreach ($this->result() as $key => $value) {
 			if ($value['COLUMN_COMMENT'] != "") {

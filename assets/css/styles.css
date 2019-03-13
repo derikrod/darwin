@@ -22,16 +22,18 @@
 #error_display{
   color:red;
 }
-
+.table{
+  font-size: 13.5px
+}
 
 .main-body{
     background: #D1DED8;
-}
+}    
 
 .module-div{
   background-color:#F8FBF7;
   box-shadow: 3px 3px 3px #222;
-  height: 250px;
+  min-height: 250px;
 }
 
 .navbar-default {

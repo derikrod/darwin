@@ -35,6 +35,7 @@ $(function () {
 			$(".modal-title").html("Adicionar Usuário");
 			$(".modal-body").html(data.user_form);
 			$("#mymodal").modal();
+			$(".hours").mask('00:00');
 			$("#add_users").submit(function(event) {
 				event.preventDefault();
 				$.ajax({
@@ -84,6 +85,7 @@ $(function () {
 			$(".modal-title").html("Alterar dados");
 			$(".modal-body").html(data.user_form);
 			$("#mymodal").modal();
+			$(".hours").mask('00:00');
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
 					$(".modal-body").html('<p>Você deseja realmente excluir esses dados?</p><button type="button" id="confirm_delete"class="btn btn-danger" data-table="'+$(this).data('table')+'" data-path="'+$(this).data('path')+'" data-id="'+$(this).data('id')+'">Excluir</button>');
@@ -146,9 +148,91 @@ $(function () {
 		})
 		.always(function() {
 			console.log("complete");
-		});
-		
+		});	
 	});
+
+	 $('.table').dataTable({
+          "oLanguage": {
+          "sEmptyTable":     "Nenhum registro encontrado na tabela",
+          "sInfo": "Mostrar _START_ até _END_ de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrar 0 até 0 de 0 Registros",
+          "sInfoFiltered": "(Filtrar de _MAX_ total registros)",
+          "sInfoPostFix":    "",
+          "sInfoThousands":  ".",
+          "sLengthMenu": "Mostrar _MENU_ registros por pagina",
+          "sLoadingRecords": "Carregando...",
+          "sProcessing":     "Processando...",
+          "sZeroRecords": "Nenhum registro encontrado",
+          "sSearch": "Pesquisa Rápida",
+          "oPaginate": {
+             "sNext": "Próximo",
+             "sPrevious": "Anterior",
+             "sFirst": "Primeiro",
+             "sLast":"Ultimo"
+          },
+        "oAria": {
+            "sSortAscending":  ": Ordenar colunas de forma ascendente",
+            "sSortDescending": ": Ordenar colunas de forma descendente"
+            }
+        },
+        "iDisplayLength": 50
+      });
+
+	 $(".day-line").click(function(event) {
+	    var	date = $(this).data('date');
+	 	$.ajax({
+	 		url: $(this).data('path')+"/events/getaddform/"+$(this).data('user')+"/"+date,
+	 		type: 'post',
+	 		dataType: 'json',
+	 	})
+	 	.done(function(data) {
+	 		$(".modal-title").html("Adicionar Evento");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+			$("#dat_startdate").val(data.date);
+			$(".hours").mask('00:00');
+			
+			 $("#add_events").submit(function(event) {
+			 	event.preventDefault();
+			 	if (comparedate($("#dat_startdate").val(),$("#dat_startdate").val(),$("#hrs_starthour").val(),$("#dat_enddate").val(),$("#hrs_finalhour").val())) {
+				 	$.ajax({
+				 		url: $(this).data('path')+'/events/addevent/',
+				 		type: 'default GET (Other values: POST)',
+				 		dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+				 		data: {param1: 'value1'},
+				 	})
+				 	.done(function() {
+				 		console.log("success");
+				 	})
+				 	.fail(function() {
+				 		console.log("error");
+				 	})
+				 	.always(function() {
+				 		console.log("complete");
+				 	});
+				 }else{
+				 	alert('O a data e/ou horário de início deve ser maior do que a data/horário de fim do evento');
+				 }
+			 	
+			 });
+	 	})
+	 	.fail(function() {
+	 		console.log("error");
+	 	})
+	 	.always(function() {
+	 		console.log("complete");
+	 	});
+	 	
+	 });
+
+
+	 $("#sel_month").change(function(event) {
+	 	window.location.assign($(this).data('path')+'/events/'+$('#sel_month').val()+'/'+$('#sel_year').val())
+	 });
+   
+   	 $("#sel_year").change(function(event) {
+	 	window.location.assign($(this).data('path')+'/events/'+$('#sel_month').val()+'/'+$('#sel_year').val())
+	 });
 
 
 });
@@ -161,3 +245,11 @@ function setCookie(cname, cvalue, exdays) {
 	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+function comparedate (startdate,starthour,finishdate,finishhour){
+	alert( Date.parse(finishdate+' '+finishhour+':00')+' & '+Date.parse(finishdate+' '+finishhour+':00') )
+	if (Date.parse(finishdate+finishhour) > Date.parse(finishdate+finishhour) ) {
+		return true;
+	}else{
+		return false;
+	}
+}

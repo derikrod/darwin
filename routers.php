@@ -2,6 +2,6 @@
 	 global $routes;
 	 $routes = array();
 
-	 $routes['/galeria/{id}/{title}'] = '/galeria/abrir/:id/:title'; 
+	 $routes['/events/{month}/{year}'] = '/events/index/:month/:year'; 
 
  ?>

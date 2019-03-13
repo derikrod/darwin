@@ -61,27 +61,7 @@
 			$this-> query("SELECT * FROM users");
 			return $this -> numRows();
 		}
-		//load module
-		public function loadUserModule($idmodule,$iduser )
-		{				
-			$usermodule = "";
-			if (!$this->check_modules($idmodule,$iduser)) {
-				return $usermodule;
-			}else{
-				$usermodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="col-xs-12 module-div">
-									<br><h3>Usuários</h3><br>
-									<p><b>Número de usuários cadastrados: </b> '.$this-> count_users().'</p>
-									<br>
-									<hr>
-									<p class="text-right"><a href="'.BASE_URL.'/users" class="btn btn-success">Lista de usuários</a></p>
-									
-									</div>
-							  </div>';
-
-				return $usermodule;
-			}
-		}
+	
 		//create
 		public function addUser($data)
 		{
@@ -109,7 +89,27 @@
 			$this -> delete('users',array('id'=>$id));
 			return true;
 		}
+		//load module
+		public function loadUserModule($idmodule,$iduser )
+		{				
+			$usermodule = "";
+			if (!$this->check_modules($idmodule,$iduser)) {
+				return $usermodule;
+			}else{
+				$usermodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<div class="col-xs-12 module-div">
+									<br><h3>Usuários</h3><br>
+									<p><b>Número de usuários cadastrados: </b> '.$this-> count_users().'</p>
+									<br>
+									<hr>
+									<p class="text-right"><a href="'.BASE_URL.'/users" class="btn btn-success">Lista de usuários</a></p>
+									
+									</div>
+							  </div>';
 
+				return $usermodule;
+			}
+		}
 			
 	}
  ?>

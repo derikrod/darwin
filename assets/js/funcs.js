@@ -194,12 +194,12 @@ $(function () {
 			
 			 $("#add_events").submit(function(event) {
 			 	event.preventDefault();
-			 	if (comparedate($("#dat_startdate").val(),$("#dat_startdate").val(),$("#hrs_starthour").val(),$("#dat_enddate").val(),$("#hrs_finalhour").val())) {
+			 	if (comparedate($("#dat_startdate").val(),$("#hrs_starthour").val(),$("#dat_enddate").val(),$("#hrs_finalhour").val())) {
 				 	$.ajax({
 				 		url: $(this).data('path')+'/events/addevent/',
-				 		type: 'default GET (Other values: POST)',
-				 		dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-				 		data: {param1: 'value1'},
+				 		type: 'post',
+				 		dataType: 'json',
+				 		data: $("#add_users").serialize(),
 				 	})
 				 	.done(function() {
 				 		console.log("success");
@@ -246,7 +246,7 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function comparedate (startdate,starthour,finishdate,finishhour){
-	alert( Date.parse(finishdate+' '+finishhour+':00')+' & '+Date.parse(finishdate+' '+finishhour+':00') )
+	alert( Date.parse(startdate+' '+starthour)+' & '+Date.parse(finishdate+' '+finishhour) )
 	if (Date.parse(finishdate+finishhour) > Date.parse(finishdate+finishhour) ) {
 		return true;
 	}else{

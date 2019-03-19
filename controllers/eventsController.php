@@ -36,7 +36,7 @@
 			
 			echo json_encode( array('form' => $e->getAddEventForm($id), 'date'=> $date));
 		}
-
+		
 		public function addevents()
 		{
 			$e = new Event();

@@ -75,7 +75,9 @@ class model{
 		}
 	}
 
-	private function ptBRdate($date)
+
+
+	public function ptBRdate($date)
 	{
 		$split_date = explode('-', $date);
 		return $split_date[2]."/".$split_date[1]."/".$split_date[0];

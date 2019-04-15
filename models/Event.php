@@ -17,11 +17,7 @@
 			return $this -> numRows();
 		}
 
-		private function ptbrdate($date)
-		{
-			$split_date = explode('-', $date);
-			return $split_date[2]."/".$split_date[1]."/".$split_date[0];
-		}
+		
 
 			public function checkEvent($iduser,$date_start,$date_end)
 		{
@@ -31,7 +27,7 @@
 			if ($this-> numRows() > 0) {
 				$has_results = true;
 				foreach ($this-> result() as $key => $value) {
-					$event_list .= "<p>".$this-> ptbrdate($value['dat_startdate'])." ".utf8_encode($value["txt_name"])."</p>";
+					$event_list .= "<p>".$this-> ptbrdate($value['dat_startdate'])." ".$value["txt_name"]."</p>";
 				}
 			}
 
@@ -39,18 +35,52 @@
 			if ($this-> numRows() > 0) {
 				$has_results = true;
 				foreach ($this-> result() as $key => $value) {
-					$event_list .= "<p>".$this-> ptbrdate($value['dat_startdate'])." ".utf8_encode($value["txt_name"])."</p>";
+					$event_list .= "<p>".$this-> ptbrdate($value['dat_startdate'])." ".$value["txt_name"]."</p>";
 				}
 			}
 
-			return  array('events' => $has_results, 'list' = $event_list);
+			return  array('events' => $has_results, 'list' => $event_list);
 		}
 		
 
 		public function addEvent($data)
 		{
 			$this-> insert('events',$data);
+			return true;
 		}
+		public function getEvents($id,$date)
+		{
+			$sql = "SELECT * FROM events WHERE non_users =".$id." AND '".$date."' BETWEEN dat_startdate AND dat_enddate";
+			$this-> query($sql);
+			$event_list = "";
+			foreach ($this->result() as $key => $value) {
+				$event_list .= "<p><b>Nome do evento:</b> ".$value["txt_name"]."</p>
+								<p><b>Descrição:</b> ".$value["lgtxt_description"]."</p>
+								<p><b>Início</b>: ".$this->ptbrdate($value["dat_startdate"])." às ".$value["hrs_starthour"]."</p>
+								<p><b>Término</b>: ".$this->ptbrdate($value["dat_enddate"])." às ".$value["hrs_finalhour"]."</p>
+								<p class=\"text-center\">
+								<button type=\"button\" class=\"btn btn-info\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\">
+								</span> EDITAR</button> &nbsp;&nbsp;
+								<button type=\"button\" class=\"btn btn-danger\"><span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span> Remover</button> &nbsp;&nbsp;
+								<button type=\"button\" class=\"btn btn-success\"><span class=\"glyphicon glyphicon-share\" aria-hidden=\"true\"></span> Compartilhar</button> &nbsp;&nbsp;
+								<button type=\"button\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-comment\" aria-hidden=\"true\"></span> COMENTÁRIOS</button>
+								</p>
+								 &nbsp;&nbsp;
+								
+								<hr>
+
+				";
+			}
+			return $event_list;
+		}
+
+		//edtit event
+		public function openEdit($id)
+		{
+			return $this -> createForm('events', 'Atualizar',$id);
+		}
+
+
 		//load module
 		public function loadEventModule($idmodule,$iduser )
 		{				

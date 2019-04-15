@@ -19,7 +19,9 @@ $(function () {
 			console.log("error");
 		})
 	});
-
+	$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 	$("#logout_btn").click(function() {
 		document.cookie = "intra_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		window.location.assign($(this).data('path'));
@@ -196,13 +198,50 @@ $(function () {
 			 	event.preventDefault();
 			 	if (comparedate($("#dat_startdate").val(),$("#hrs_starthour").val(),$("#dat_enddate").val(),$("#hrs_finalhour").val())) {
 				 	$.ajax({
-				 		url: $(this).data('path')+'/events/addevent/',
+				 		url: $(this).data('path')+'/events/compareevent/'+$('#non_users').val()+'/'+$('#dat_startdate').val()+"/"+$("#dat_enddate").val(),
 				 		type: 'post',
 				 		dataType: 'json',
-				 		data: $("#add_users").serialize(),
+				 		data: $("#add_events").serialize(),
 				 	})
-				 	.done(function() {
-				 		console.log("success");
+				 	.done(function(data) {
+				 		$(".modal-title").html("Adicionar Evento");
+						$(".modal-body").html(data.form);
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+						$('#hidden_add_event_form').submit(function(event) {
+							$.ajax({
+								url: $(this).data('path')+"/events/add",
+								type: 'post',
+								dataType: 'json',
+								data: $('#hidden_add_event_form').serialize() ,
+							})
+							.done(function(data) {
+								if (data.success == 1) {
+									$(".modal-title").html("Adicionar Evento");
+									$(".modal-body").html('<p>Evento cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+									$("#mymodal").modal();
+									$(".reload-btn").click(function(event) {
+										window.location.reload();
+									});
+								}else{
+									$(".modal-title").html("Adicionar Evento");
+									$(".modal-body").html('<p>Ocorreu um erro ao cadastrar o Evento</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+									$("#mymodal").modal();
+									$(".reload-btn").click(function(event) {
+										window.location.reload();
+									});
+								}
+							})
+							.fail(function() {
+								console.log("error");
+							})
+							.always(function() {
+								console.log("complete");
+							});
+							
+						});
 				 	})
 				 	.fail(function() {
 				 		console.log("error");
@@ -211,7 +250,7 @@ $(function () {
 				 		console.log("complete");
 				 	});
 				 }else{
-				 	alert('O a data e/ou horário de início deve ser maior do que a data/horário de fim do evento');
+				 	alert('A data e/ou horário de início devem ser maiores do que a data/horário de fim do evento');
 				 }
 			 	
 			 });
@@ -235,6 +274,27 @@ $(function () {
 	 });
 
 
+	 $('.event-btn').click(function() {
+	 	$.ajax({
+	 		url: $(this).data('path')+'/events/openevent/'+$(this).data('edate'),
+	 		type: 'post',
+	 		dataType: 'json',
+	 	})
+	 	.done(function(data) {
+	 		$(".modal-title").html("Lista de eventos");
+			$(".modal-body").html(data.events);
+			$("#mymodal").modal();
+	 	})
+	 	.fail(function() {
+	 		console.log("error");
+	 	})
+	 	.always(function() {
+	 		console.log("complete");
+	 	});
+	 	
+	 });
+
+
 });
 
 //auxiliares
@@ -246,8 +306,8 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function comparedate (startdate,starthour,finishdate,finishhour){
-	alert( Date.parse(startdate+' '+starthour)+' & '+Date.parse(finishdate+' '+finishhour) )
-	if (Date.parse(finishdate+finishhour) > Date.parse(finishdate+finishhour) ) {
+	
+	if (Date.parse(startdate+' '+starthour) < Date.parse(finishdate+' '+finishhour) ) {
 		return true;
 	}else{
 		return false;

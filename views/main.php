@@ -39,7 +39,10 @@
     </nav>
     <div class="row">
     	<?php
-    		if (isset($usermodule)) {
+    		 if (isset($trellomodule)) {
+          echo($trellomodule);       
+        }
+        if (isset($usermodule)) {
     			echo($usermodule);    		
     		}
         if (isset($eventmodule)) {

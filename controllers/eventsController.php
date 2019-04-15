@@ -36,11 +36,43 @@
 			
 			echo json_encode( array('form' => $e->getAddEventForm($id), 'date'=> $date));
 		}
-		
-		public function addevents()
+
+		public function compareevent($id,$startdate,$enddate){
+			$e = new Event();
+			$res = $e -> checkEvent($id,$startdate,$enddate);
+			if ($res["events"]){
+				$hidden_form = '<h3 class="text-center">Existem eventos já criados para esse período</h3><div class="row"><div class="col-xs-12">'.$res["list"].'</div></div><form method="post" action="" id="hidden_add_event_form" data-path="'.BASE_URL.'">';
+				foreach ($_POST as $key => $value) {
+					$hidden_form .= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
+				}
+				$hidden_form .='<input type="button" value="Cancelar Cadastro" class="btn btn-info reload-btn">&nbsp;&nbsp;<input type="submit" value="Cadastrar Novo Evento" class="btn btn-sucess">
+				</form>';
+				echo json_encode(array('success' =>1, 'form'=>$hidden_form));
+			}else{
+				$e = new Event();
+
+				if($e ->addEvent($_POST)){
+				echo json_encode(array('success' =>0, 'form'=>'<p>Evento cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">'));
+				}else{
+					echo json_encode(array('success' =>0, 'form'=>'<p>Ocorreu um erro inesperado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">'));
+				}
+			}
+		}
+		public function openevent($date)
 		{
 			$e = new Event();
-			$e-> addEvent($_POST); 
+			echo json_encode(array('events'=>$e-> getEvents($_COOKIE["intra_user"],$date)));
 		}
+		public function add()
+		{
+			$e = new Event();
+			if ($e-> addEvent($_POST)) {
+				echo json_encode(array('success' => 1 ));
+			}else{
+				echo json_encode(array('success' => 0 ));
+			}
+		}
+		
+	
 	}
  ?>

@@ -1,10 +1,8 @@
 <?php 
-	class homeController extends controller{
+	class hoursController extends controller{
 		function index()
 		{	
-			$u = new User();
-			$e = new Event();
-			$t = new Trello();
+			$h new Hours;
 			
 			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
 				$dados =  array();

@@ -228,10 +228,22 @@ class Calendar extends model
 								$holyday_name = $key;
 							} 
 						}
-					  $calendrio.= "<div class=\"line day-line ".$holyday."\" data-path=\"".BASE_URL."\" data-user=\"".$_COOKIE["intra_user"]."\" data-date=\"".$year."-".$mes."-".str_pad($dia, 2,0,STR_PAD_LEFT)."\">".$dia."</div>".$holyday_name;
+						$sql_events = "SELECT * FROM events WHERE non_users = ".$_COOKIE['intra_user']." AND '".$year."-".$mes."-".$dia."' BETWEEN dat_startdate AND dat_enddate";
+						$this-> query($sql_events);
+						$event_line = "";
+						if ($this-> numRows() > 0 ) {
+							$event_tip = "";
+							foreach ($this-> result() as $key => $value) {
+								$event_tip .='<p>'.$value['txt_name'].' '.$value["hrs_starthour"].' às '.$value["hrs_finalhour"].'</p>';
+							}
+							$event_line = '<p><a style="width:100%;border-radius:0;" class="btn btn-danger event-btn" data-path="'.BASE_URL.'"
+							data-toggle="tooltip" data-placement="bottom" data-html="true" title="'.$event_tip.'" data-edate="'.$year.'-'.$mes.'-'.$dia.'">Eventos('.$this-> numRows().')</a></p>';
+						}
+
+					  $calendrio.= "<div class=\"line day-line ".$holyday."\" data-path=\"".BASE_URL."\" data-user=\"".$_COOKIE["intra_user"]."\" data-date=\"".$year."-".$mes."-".str_pad($dia, 2,0,STR_PAD_LEFT)."\">".$dia."</div>".$holyday_name.$event_line;
 					   $holyday = "";
 					   $holyday_name = "";
-				 }
+				 	}
 			      }
 			      else
 			      {

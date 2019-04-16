@@ -48,6 +48,9 @@
         if (isset($eventmodule)) {
           echo($eventmodule);       
         }
+         if (isset($bhmodule)) {
+          echo($bhmodule);       
+        }
     	?>
     </div>
 		

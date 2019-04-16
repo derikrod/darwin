@@ -100,6 +100,7 @@
 									<div class="col-xs-12 module-div">
 									<br><h3>Usuários</h3><br>
 									<p><b>Número de usuários cadastrados: </b> '.$this-> count_users().'</p>
+									<p>&nbsp;</p>
 									<br>
 									<hr>
 									<p class="text-right"><a href="'.BASE_URL.'/users" class="btn btn-success">Lista de usuários</a></p>

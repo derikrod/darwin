@@ -288,7 +288,7 @@ class model{
 
 		return utf8_encode($option);
 	}
-	public function createTable($table_name,$condition = array(),$where_cond = 'AND')
+	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true)
 	{
 		$table = "";
 		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table_name."';";
@@ -296,7 +296,7 @@ class model{
 		$table ='<table class="table" id="'.$table_name.'_table"><thead>';
 	 
 		foreach ($this->result() as $key => $value) {
-			if ($value['COLUMN_COMMENT'] != "") {
+			if ($value['COLUMN_COMMENT'] != ""  && substr($value['COLUMN_NAME'],0, 3)!='psw') {
 				$table .=  '<th>'.utf8_encode($value['COLUMN_COMMENT']).'</th>';
 			}	
 		}
@@ -308,7 +308,7 @@ class model{
 				$condition[$key] = $key." = '".$value."'";
 
 			}
-			$conditional = implode($where_cond, $condition);
+			$conditional = 'WHERE '.implode($where_cond, $condition);
 		}
 		$sql = "SELECT * FROM ".$table_name." ".$conditional;
 		$this-> query($sql);
@@ -320,9 +320,14 @@ class model{
 		}
 		
 		foreach ($res as $key => $intraarray) {
-			$table .= '<tr class="inform-row" data-table="'.$table_name.'" data-id="'.$intraarray['id'].'" data-path="'.BASE_URL.'">';
+			if ($editable) {
+				$table .= '<tr class="inform-row" data-table="'.$table_name.'" data-id="'.$intraarray['id'].'" data-path="'.BASE_URL.'">';
+			}else{
+				$table .= '<tr>';
+			}
+			
 			foreach ($intraarray as $key => $value) {
-				if (!is_numeric($key) && $key != 'id' && substr($key,0, 3)!='non') {
+				if (!is_numeric($key) && $key != 'id' && substr($key,0, 3)!='non'  && substr($key,0, 3)!='psw') {
 					if (substr($key,0, 3) == 'sel') {
 					 	$table .= "<td>".$this->get_options($key,$value) ."</td>";
 					}elseif (substr($key,0, 3) == 'dat') {

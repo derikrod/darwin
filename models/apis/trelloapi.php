@@ -19,7 +19,7 @@ window.Trello.rest('GET', 	'/members/me/boards', function (data) {
 	// body...
 	for(var i in data){
 		if (data[i].closed === false) {
-			$('#trello_contents').append('<blockquote class="trello-board-compact col-xs-6"><a href="'+data[i].url+'">Trello Board</a></blockquote>');
+			$('#trello_contents').append('<blockquote class="trello-board-compact col-xs-6"><a href="'+data[i].url+'">Trello Board</a></blockquote>&nbsp;&nbsp;');
 			$('#trello_contents').append('<script src="https://p.trellocdn.com/embed.min.js">');
 		}
 			

@@ -1,5 +1,5 @@
 <?php  
-	Class Hours Extends Model{
+	Class Hours Extends model{
 		public function hoursTable()
 		{
 			return $this-> createForm('hours','Cadastrar');
@@ -14,9 +14,14 @@
 			}
 		}
 
-		public function listHours()
-		{
-			return $this-> createTable('hours',array('sel_users' => $_COOKIE['intra_user'])) ;
+		public function listHours($id)
+		{	
+			$html = '<div class="row module-div">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas aprovadas</p>
+							'.$this-> createTable('hours',array('sel_users' =>$id),'AND',false) .'
+						</div>
+					</div>';
+			return $html;
 		}
 
 		//auxiliares
@@ -50,7 +55,7 @@
 		public function hourForm($id)
 		{
 			# code...
-			$this-> query('SELECT * FROM users WHERE id ='.$id;)
+			$this-> query('SELECT * FROM users WHERE id ='.$id);
 			foreach ($this-> result() as $key => $value) {
 				$form = '	
 					<style type="text/css">
@@ -83,7 +88,7 @@
 							<div class="col-xs-5 col-xs-offset-1 presentation-row">
 								<p>Empresa: {EMPRESA}</p>
 								<p>Funcionário: '.$value['txt_name'].'</p>
-								<p>Departamento: '.$this-> getDepartment($value['sel_departments'])'</p>
+								<p>Departamento: '.$this-> getDepartment($value['sel_departments']).'</p>
 							</div>
 							<div class="col-xs-5 presentation-row">
 								<p>CNPJ: '.$this->getCompany($value['sel_companies'])['txt_name'].'</p>
@@ -157,9 +162,49 @@
 			}
 		}
 
-		public function loadUserHoursModule($iduser,$idmodule)
+
+		public function getPositiveHours($id)
 		{
-			# code...
+			$this-> query('SELECT * FROM users WHERE id ='.$id);
+			$hours = "";
+			foreach ($this-> result() as $key => $value) {
+				$hours = $value['hrs_hours'];
+			}
+
+			return $hours;
+		}
+
+		public function getNegative($id)
+		{
+			$this-> query('SELECT * FROM users WHERE id ='.$id);
+			$hours = "";
+			foreach ($this-> result() as $key => $value) {
+				$hours = $value['hrs_negativehours'];
+			}
+
+			return $hours;
+		}
+		public function loadUserHoursModule($idmodule,$iduser)
+		{
+			$hoursmodule = "";
+	
+			if (!$this->check_modules($idmodule,$iduser)) {
+				return $hoursmodule;
+			}else{
+				$hoursmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<div class="col-xs-12 module-div">
+										<br><h3>Banco de Horas</h3><br>
+										<p><b>Horas extras</b> '.$this-> getPositiveHours($iduser).'</p>
+										<p><b>Horas negativas</b> '.$this-> getNegative($iduser).'</p>
+										<br>
+										<hr>
+										<p class="text-right"><a href="'.BASE_URL.'/hours" class="btn btn-success">Banco de horas</a></p>
+									</div>
+							  </div>';
+
+				return $hoursmodule;
+			}
+			
 		}
 
 		public function loadAdminHoursModule($iduser,$idmodule)

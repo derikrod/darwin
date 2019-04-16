@@ -84,9 +84,9 @@
 		//load module
 		public function loadEventModule($idmodule,$iduser )
 		{				
-			$usermodule = "";
+			$eventmodule = "";
 			if (!$this->check_modules($idmodule,$iduser)) {
-				return $usermodule;
+				return $eventmodule;
 			}else{
 				$eventmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="col-xs-12 module-div">

@@ -51,6 +51,9 @@
          if (isset($bhmodule)) {
           echo($bhmodule);       
         }
+         if (isset($bhadmmodule)) {
+          echo($bhadmmodule);       
+        }
     	?>
     </div>
 		

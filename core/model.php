@@ -139,7 +139,7 @@ class model{
 			case 'psw':
 				$input = '<input type="password" id="'.$name.'" name="'.$name.'" value="'.$value.'" class="form-control" '.$required.'>';
 				break;
-			case 'lgtxt':
+			case 'lgt':
 				$input = '<textarea name="'.$name.'" id="'.$name.'" cols="30" rows="10" class="form-control" '.$required.'>'.$value.'</textarea>';	
 				break;
 			case 'sel':
@@ -230,7 +230,7 @@ class model{
 	}
 
 	//criador de formulários com campos específicos
-	public function getSmForm($fields = array(),$table,$submit_text,$form_name)
+	public function getSmForm($fields = array(),$table,$submit_text,$form_name,$hiddens = array())
 	{
 		$form = '<form id="'.$form_name.'_form" data-path='.BASE_URL.'><span id="error_display" class="text-center"></span>';
 		foreach ($fields as $key => $value) {
@@ -242,11 +242,18 @@ class model{
 		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'darwin' AND TABLE_NAME = '".$table."' AND (".$sql_fields.")";
 
 		$this -> query($sql);
+		if (count($hiddens) > 0) {
+				foreach ($hiddens as $key => $value) {
+					$form.= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
+				}
+			}
 		foreach ($this->result() as $key => $value) {
 			$required = "";
 			if ($value['IS_NULLABLE'] == 'NO') {
 				$required = "required";
 			}
+
+			
 			$split_key = explode('_', $value['COLUMN_NAME']);
 			$form .='<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
 		}
@@ -288,6 +295,8 @@ class model{
 
 		return utf8_encode($option);
 	}
+
+
 	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true)
 	{
 		$table = "";
@@ -308,12 +317,13 @@ class model{
 				$condition[$key] = $key." = '".$value."'";
 
 			}
-			$conditional = 'WHERE '.implode($where_cond, $condition);
+			$conditional = 'WHERE '.implode(' '.$where_cond.' ', $condition);
 		}
 		$sql = "SELECT * FROM ".$table_name." ".$conditional;
 		$this-> query($sql);
 		$res = array();
 		$i=0;
+		
 		foreach ($this->result() as $key => $value) {
 			$res[$i] = $value;
 			$i++;

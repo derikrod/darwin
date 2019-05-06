@@ -85,7 +85,7 @@ $(function () {
 		})
 		.done(function(data) {
 			$(".modal-title").html("Alterar dados");
-			$(".modal-body").html(data.user_form);
+			$(".modal-body").html(data.form);
 			$("#mymodal").modal();
 			$(".hours").mask('00:00');
 			$('#remove_btn').click(function () {
@@ -284,6 +284,7 @@ $(function () {
 	 		$(".modal-title").html("Lista de eventos");
 			$(".modal-body").html(data.events);
 			$("#mymodal").modal();
+
 	 	})
 	 	.fail(function() {
 	 		console.log("error");
@@ -294,7 +295,33 @@ $(function () {
 	 	
 	 });
 
-
+	 $("#add_bh_btn").click(function(event) {
+	 	/* Act on the event */
+	 	$.ajax({
+	 		url: $(this).data('path')+'/hours/getuseraddform/'+$(this).data('iduser'),
+	 		type: 'post',
+	 		dataType: 'json',
+	 	})
+	 	.done(function(data) {
+	 		$(".modal-title").html("Novo registro de horas");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+			$(".hours").mask('00:00');
+			$("#bh_pdf_form").attr({
+				action: $("#bh_pdf_form").data('path')+'/pdf',
+				target: '_blank',
+				method: 'post'
+			});
+			
+	 	})
+	 	.fail(function() {
+	 		console.log("error");
+	 	})
+	 	.always(function() {
+	 		console.log("complete");
+	 	});
+	 	
+	 });
 });
 
 //auxiliares

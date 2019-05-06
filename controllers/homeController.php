@@ -17,6 +17,7 @@
 				$dados["eventmodule"] = $e-> loadEventModule(2,$_COOKIE["intra_user"] );
 				$dados["trellomodule"] = $t-> loadTrelloModule(3,$_COOKIE["intra_user"] );
 				$dados["bhmodule"] = $h-> loadUserHoursModule(4,$_COOKIE["intra_user"]);
+				$dados["bhadmmodule"] = $h-> loadAdminHoursModule(5,$_COOKIE["intra_user"]);
 				$this->loadTemplate('main',$dados);
 			}else{
 				$dados = array(

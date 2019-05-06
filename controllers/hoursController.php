@@ -1,6 +1,6 @@
 <?php 
 	class hoursController extends controller{
-		function index()
+		public function index()
 		{	
 			$h = new Hours();
 			$u = new User();
@@ -17,8 +17,37 @@
 				'form'=> $u-> getLoginForm( array('txt_login','psw_pass'),'users','Entrar','login')
 				);
 				$this->loadTemplate('home',$dados);
+			}	
+		}
+		public function admin($value='')
+		{
+			$h = new Hours();
+			$u = new User();
+			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
+				$dados =  array();
+				foreach ($u-> getUserInformation($_COOKIE["intra_user"]) as $key => $value) {
+					$username = $value["txt_name"];
+				}
+				$dados["name"] = $username;
+				$dados["bhmodule"] = $h->listAdminHours();
+				$this->loadTemplate('main',$dados);
+			}else{
+				$dados = array(
+				'form'=> $u-> getLoginForm( array('txt_login','psw_pass'),'users','Entrar','login')
+				);
+				$this->loadTemplate('home',$dados);
 			}
-			
+		}
+		public function updateForm($id){
+			$h = new Hours();
+			echo json_encode(array('form' =>$h-> getUpdateHourForm($id)));
+		}
+
+		public function getuseraddform($id)
+		{	
+			$h = new Hours();
+			$form =  $h->userHourForm($id);
+			echo json_encode(array('form'=>$form)) ;
 		}
 	}
  ?>

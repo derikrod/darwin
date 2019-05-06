@@ -28,7 +28,7 @@
 
 		public function updateForm($id){
 			$u = new User();
-			echo json_encode(array('user_form' => $u->getUpdateUserForm($id)));
+			echo json_encode(array('form' => $u->getUpdateUserForm($id)));
 		}
 
 		public function adduser()

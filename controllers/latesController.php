@@ -44,5 +44,40 @@
 				$this->loadTemplate('home',$dados);
 			}	
 		}
+
+		public function addform()
+		{
+			$l = new Late();
+			echo json_encode(array('form'=>$l-> getLateForm()));
+		}
+		public function updateForm($id){
+			$l = new Late();
+			echo json_encode(array('form' =>$l-> getUpdateLateForm($id)));
+		}
+
+		public function addlate()
+		{
+			$l = new Late();
+			if ($l->addLate($_POST)) {
+				echo json_encode(array('success' => 1));
+			}else{
+				echo json_encode(array('success' => 0));
+			}
+		}
+
+		public function update($id)
+		{
+			$l = new Late();
+			$l-> updateLate($_POST,$id);
+			echo json_encode(array('success'=> 1));
+		}
+
+
+		public function delete($id)
+		{
+			$l = new Late();
+			$l-> deleteLate($id);
+			echo json_encode(array('success'=> 1));
+		}
 	 } 
  ?>

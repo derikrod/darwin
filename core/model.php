@@ -223,7 +223,7 @@ class model{
 				
 			}
 			$list .= '</ul>';
-			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'">&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" id="remove_btn" data-id="'.$id.'" data-path="'.BASE_URL.'" data-table="'.$table.'">Rmover</button></div> </form>';
+			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'">&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" id="remove_btn" data-id="'.$id.'" data-path="'.BASE_URL.'" data-table="'.$table.'">Remover</button></div> </form>';
 			return $form;	
 		}
 		

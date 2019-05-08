@@ -88,6 +88,7 @@ $(function () {
 			$(".modal-body").html(data.form);
 			$("#mymodal").modal();
 			$(".hours").mask('00:00');
+			$("#sel_users").css('pointer-events','none');
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
 					$(".modal-body").html('<p>Você deseja realmente excluir esses dados?</p><button type="button" id="confirm_delete"class="btn btn-danger" data-table="'+$(this).data('table')+'" data-path="'+$(this).data('path')+'" data-id="'+$(this).data('id')+'">Excluir</button>');
@@ -118,13 +119,13 @@ $(function () {
 					});
 
 			})
-			$("#update_users").submit(function(event) {
+			$("#update_"+$('.inform-row').data('table')).submit(function(event) {
 				event.preventDefault();
 				$.ajax({
 					url: $(this).data('path')+'/'+$(this).data('table')+'/update/'+$(this).data('id'),
 					type: 'post',
 					dataType: 'json',
-					data: $("#update_users").serialize(),
+					data: $("#update_"+$('.inform-row').data('table')).serialize(),
 				})
 				.done(function(data) {
 					if (data.success == 1) {
@@ -151,7 +152,10 @@ $(function () {
 		.always(function() {
 			console.log("complete");
 		});	
+
 	});
+
+
 
 	 $('.table').dataTable({
           "oLanguage": {
@@ -322,6 +326,63 @@ $(function () {
 	 	});
 	 	
 	 });
+
+	 $("#add_late_btn").click(function(event) {
+	 	/* Act on the event */
+	 	$.ajax({
+	 		url: $(this).data('path')+'/lates/addform',
+	 		type: 'post',
+	 		dataType: 'json'
+	 	})
+	 	.done(function(data) {
+	 		$(".modal-title").html("Adicionar Atraso");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+			$(".hours").mask('00:00');
+			$("#add_lates").submit(function(event) {
+				/* Act on the event */
+				event.preventDefault();
+				$.ajax({
+					url: $(this).data('path')+'/lates/addlate',
+					type: 'post',
+					dataType: 'json',
+					data: $("#add_lates").serialize(),
+				})
+				.done(function(data) {
+					if (data.success == 1) {
+									$(".modal-title").html("Adicionar Atraso");
+									$(".modal-body").html('<p>Atraso cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+									$("#mymodal").modal();
+									$(".reload-btn").click(function(event) {
+										window.location.reload();
+									});
+								}else{
+									$(".modal-title").html("Adicionar Atraso");
+									$(".modal-body").html('<p>Ocorreu um erro ao cadastrar o Atraso</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+									$("#mymodal").modal();
+									$(".reload-btn").click(function(event) {
+										window.location.reload();
+									});
+								}
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+ 		})
+	 	.fail(function() {
+	 		console.log("error");
+	 	})
+	 	.always(function() {
+	 		console.log("complete");
+	 	});
+	 	
+	 });
+
 });
 
 //auxiliares

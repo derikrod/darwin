@@ -155,16 +155,16 @@ class model{
 				$input = $this-> get_radio($spliname[1],$name,$required,$value);	
 				break;	
 			case 'tel':
-				$input = '<input type="text" name="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control phone" >';	
+				$input = '<input type="text" name="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control phone" '.$required.'>';	
 				break;
 			case 'dat':
-				$input = '<input type="date" name="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control date" >';
+				$input = '<input type="date" name="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control date" '.$required.'>';
 				break;
 			case 'hrs':
-				$input = '<input type="text" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control hours">';
+				$input = '<input type="text" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control hours" '.$required.'>';
 				break;
 			case 'eml':
-				$input = '<input type="email" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control">';
+				$input = '<input type="email" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control" '.$required.'>';
 				break;	
 			default:
 				$input = "";
@@ -181,7 +181,7 @@ class model{
 		if ($id == 0 ) {
 			$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table."';";
 			$this -> query($sql);
-			$form = '<form  id="add_'.$table.'" data-path='.BASE_URL.'>';
+			$form = '<form  id="add_'.$table.'" data-path='.BASE_URL.'><span id="error_display" class="text-center"></span>';
 
 			foreach ($this->result() as $key => $value) {
 				$required = "";
@@ -190,7 +190,7 @@ class model{
 				}
 				$split_key = explode('_', $value['COLUMN_NAME']);
 				if ($value['COLUMN_NAME'] != 'id' && $split_key[0] != 'non') {
-					$form .= '<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
+					$form .= '<div class="form-group" id="div_'.$value["COLUMN_NAME"].'"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
 				}	
 			}
 			if (count($hiddens) > 0) {
@@ -198,7 +198,7 @@ class model{
 					$form.= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
 				}
 			}
-			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
+			$form.='<div id="btn_'.$table.'_form" class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
 			return $form;
 		}else{
 			$sql = "SELECT * FROM ".$table." WHERE id = ".$id;
@@ -216,14 +216,14 @@ class model{
 				 		if ($res[0]['IS_NULLABLE'] == 'NO') {
 				 			$required = "required";
 				 		}
-				 		$form .= '<div class="form-group"><label for="'.$key.'">'.utf8_encode($res[0][0]).'</label>'.$this->get_input(substr($key, 0,3),$key,$required,$value).'</div>';
+				 		$form .= '<div class="form-group" id="div_'.$key.'"><label for="'.$key.'">'.utf8_encode($res[0][0]).'</label>'.$this->get_input(substr($key, 0,3),$key,$required,$value).'</div>';
 				 		$list .= '<li>'.$sql_label.'</li>';
 				 }
 				
 				
 			}
 			$list .= '</ul>';
-			$form.='<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'">&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" id="remove_btn" data-id="'.$id.'" data-path="'.BASE_URL.'" data-table="'.$table.'">Remover</button></div> </form>';
+			$form.='<div class="text-center" id="btn_'.$table.'_form"><input type="submit" class="btn btn-success" value="'.$submit_text.'">&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" id="remove_btn" data-id="'.$id.'" data-path="'.BASE_URL.'" data-table="'.$table.'">Remover</button></div> </form>';
 			return $form;	
 		}
 		
@@ -255,10 +255,10 @@ class model{
 
 			
 			$split_key = explode('_', $value['COLUMN_NAME']);
-			$form .='<div class="form-group"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
+			$form .='<div class="form-group" id="div_'.$value["COLUMN_NAME"].'"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
 		}
 
-		$form .= '<div class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
+		$form .= '<div class="text-center" id="btn_'.$table.'_form"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
 
 		return $form;
 	}
@@ -296,8 +296,15 @@ class model{
 		return utf8_encode($option);
 	}
 
-
-	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true)
+	public function isexclude($exclude,$key)
+	{
+		if (in_array($key, $exclude)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true,$exclude = array())
 	{
 		$table = "";
 		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table_name."';";
@@ -305,7 +312,7 @@ class model{
 		$table ='<table class="table" id="'.$table_name.'_table"><thead>';
 	 
 		foreach ($this->result() as $key => $value) {
-			if ($value['COLUMN_COMMENT'] != ""  && substr($value['COLUMN_NAME'],0, 3)!='psw') {
+			if ($value['COLUMN_COMMENT'] != ""  && substr($value['COLUMN_NAME'],0, 3)!='psw' && !$this->isexclude($exclude,$value['COLUMN_NAME'])) {
 				$table .=  '<th>'.utf8_encode($value['COLUMN_COMMENT']).'</th>';
 			}	
 		}
@@ -337,7 +344,7 @@ class model{
 			}
 			
 			foreach ($intraarray as $key => $value) {
-				if (!is_numeric($key) && $key != 'id' && substr($key,0, 3)!='non'  && substr($key,0, 3)!='psw') {
+				if (!is_numeric($key) && $key != 'id' && substr($key,0, 3)!='non'  && substr($key,0, 3)!='psw' && !$this->isexclude($exclude,$key)) {
 					if (substr($key,0, 3) == 'sel') {
 					 	$table .= "<td>".$this->get_options($key,$value) ."</td>";
 					}elseif (substr($key,0, 3) == 'dat') {

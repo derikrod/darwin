@@ -38,6 +38,26 @@
 				$this->loadTemplate('home',$dados);
 			}
 		}
+
+		public function update($id)
+		{
+			$h = new Hours();
+			if($h-> updateHours($_POST,$id)){
+				echo json_encode(array('success'=>1));
+			}else{
+				echo json_encode(array('success'=>0));
+			}
+		}
+
+		public function delete($id)
+		{
+			$h = new Hours();
+			if($h-> deleteHours($id)){
+				echo json_encode(array('success'=>1));
+			}else{
+				echo json_encode(array('success'=>0));
+			}
+		}
 		public function updateForm($id){
 			$h = new Hours();
 			echo json_encode(array('form' =>$h-> getUpdateHourForm($id)));

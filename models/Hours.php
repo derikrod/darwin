@@ -1,6 +1,6 @@
 <?php  
 	Class Hours Extends model{
-		public function hoursTable()
+		public function hoursForm()
 		{
 			return $this-> createForm('hours','Cadastrar');
 		}
@@ -29,6 +29,7 @@
 			return $hours.":".$minutes;
 
 		}
+
 
 		public function weekday($mydate)//format Y-m-d
 		{	
@@ -120,7 +121,7 @@
 
 				return $name;
 
-
+ 
 		}
 
 		public function calcHours($time,$date)
@@ -202,14 +203,36 @@
 		{
 			$this-> insert('hours',$data);
 		}
+
+		public function isNegative($id)
+		{
+			$this-> query('SELECT * FROM users WHERE id ='.$id);
+			$hours = "";
+			foreach ($this-> result() as $key => $value) {
+				$hours = $value['hrs_negativehours'];
+			}
+
+			if ($this->hoursToMinutes($hours)> 0) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+
 		public function listHours($id)
 		{	
+			$lates = 0;
+			if ($this-> isNegative($id)) {
+				$lates = 1;
+			}
 			$html = '<div class="row module-div">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas aprovadas</p>
 						<p class="text-center">
-							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_bh_btn" class="btn btn-primary">Novo formulário de banco de horas</button>
+							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_bh_btn" data-lates="'.$lates.'" class="btn btn-primary">Novo formulário de banco de horas</button>
 						</p>
 							'.$this-> createTable('hours',array('sel_users' =>$id,'sel_bhstatus'=>2),'AND',false) .'
+
 						</div>
 					</div>';
 			return $html;
@@ -219,9 +242,8 @@
 			$html = '<div class="row module-div">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas </p>
 						<p class="text-center">
-							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_bh_btn" class="btn btn-primary">Novo formulário de banco de horas</button>
-						</p>
-							'.$this-> createTable('hours') .'
+						
+							'.$this-> createTable('hours',array('sel_bhstatus' => 1),'AND',true,array('sel_bhstatus')) .'
 						</div>
 					</div>';
 			return $html;
@@ -235,7 +257,18 @@
 			}
 			return $user;
 		}
+		public function updateHours($data,$id)
+		{
+			$this->update('hours',$data,array('id'=>$id));
+			return true;
+		}
 
+		//delete
+		public function deleteHours($id)
+		{
+			$this -> delete('hours',array('id'=>$id));
+			return true;
+		}
 
 		//auxiliares
 		public function getCompany($id)
@@ -306,6 +339,7 @@
 			return $hours;
 		}
 
+		
 		public function getNegative($id)
 		{
 			$this-> query('SELECT * FROM users WHERE id ='.$id);
@@ -316,7 +350,6 @@
 
 			return $hours;
 		}
-
 
 		//load modules
 		public function loadUserHoursModule($idmodule,$iduser)

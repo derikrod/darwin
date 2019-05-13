@@ -89,6 +89,8 @@ $(function () {
 			$("#mymodal").modal();
 			$(".hours").mask('00:00');
 			$("#sel_users").css('pointer-events','none');
+			$("#div_sel_bhstatus").html("");
+			$("#btn_hours_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary" value="APROVAR" data-id="'+$("#update_hours").data('id')+'">');
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
 					$(".modal-body").html('<p>Você deseja realmente excluir esses dados?</p><button type="button" id="confirm_delete"class="btn btn-danger" data-table="'+$(this).data('table')+'" data-path="'+$(this).data('path')+'" data-id="'+$(this).data('id')+'">Excluir</button>');
@@ -311,6 +313,11 @@ $(function () {
 			$(".modal-body").html(data.form);
 			$("#mymodal").modal();
 			$(".hours").mask('00:00');
+			if ($("#add_bh_btn").data('lates') == 1) {
+				$("#sel_bhtypes").val(2);
+				$("#sel_bhtypes").css('pointer-events','none');
+				$("#error_display").html('Você precisa compensar seus atrasos antes de fazer horas extras');
+			}
 			$("#bh_pdf_form").attr({
 				action: $("#bh_pdf_form").data('path')+'/pdf',
 				target: '_blank',
@@ -327,6 +334,8 @@ $(function () {
 	 	
 	 });
 
+
+	 
 	 $("#add_late_btn").click(function(event) {
 	 	/* Act on the event */
 	 	$.ajax({

@@ -231,7 +231,7 @@
 						<p class="text-center">
 							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_bh_btn" data-lates="'.$lates.'" class="btn btn-primary">Novo formulário de banco de horas</button>
 						</p>
-							'.$this-> createTable('hours',array('sel_users' =>$id,'sel_bhstatus'=>2),'AND',false) .'
+							'.$this-> createTable('hours',array('sel_users' =>$id),'AND',false) .'
 
 						</div>
 					</div>';
@@ -349,6 +349,39 @@
 			}
 
 			return $hours;
+		}
+
+		public function approveHours($id)
+		{
+			$iduser = 0;
+			$negative = 0;
+			$hours = 0;
+			$this -> query("SELECT * FROM hours WHERE id =".$id);
+			foreach ($this-> result() as $key => $value) {
+				$iduser = $value["sel_users"];
+				$hours = $value["hrs_hours"];
+			}
+			$this->query('SELECT * FROM users WHERE id ='.$iduser);
+			foreach ($this->result() as $key => $value) {
+				$negative = $value['hrs_negativehours'];
+			}
+
+			$total = $this-> hoursToMinutes($negative) - $this-> hoursToMinutes($hours);
+
+			if ($total < 0 ) {
+				$total = -($total);
+				$total = $this->minutesToHours($total);
+				$this->update('users',array('hrs_negativehours' =>'00:00','hrs_hours'=> $total),array('id'=> $iduser));
+				$this->update('hours',array('sel_bhstatus' =>2),array('id'=>$id));
+			}else{
+				$total = $this->minutesToHours($total);
+				$this->update('users',array('hrs_negativehours'=>$total), array('id' =>$iduser));
+				$this->update('hours',array('sel_bhstatus'=>2),array('id'=>$id));
+			}
+
+
+			return true;
+
 		}
 
 		//load modules

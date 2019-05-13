@@ -68,5 +68,11 @@
 				echo json_encode(array('success' => 0));
 			}
 		}
+
+		public function approve($id)
+		{
+			$h = new Hours();
+			$h-> approveHours($id);
+		}
 	}
 ?>

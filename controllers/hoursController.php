@@ -69,5 +69,18 @@
 			$form =  $h->userHourForm($id);
 			echo json_encode(array('form'=>$form)) ;
 		}
+
+
+		public function approve($id)
+		{	
+			$h = new Hours();
+			if ($h-> approveHours($id)) {
+				echo json_encode(array('success'=> 1));
+			}else{
+				echo json_encode(array('success'=> 0));
+			}
+			
+			
+		}
 	}
  ?>

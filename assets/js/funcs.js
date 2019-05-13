@@ -90,7 +90,7 @@ $(function () {
 			$(".hours").mask('00:00');
 			$("#sel_users").css('pointer-events','none');
 			$("#div_sel_bhstatus").html("");
-			$("#btn_hours_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary" value="APROVAR" data-id="'+$("#update_hours").data('id')+'">');
+			$("#btn_hours_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary aprove-btn"  value="APROVAR" data-path="'+$("#update_hours").data('path')+'"data-id="'+$("#update_hours").data('id')+'">');
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
 					$(".modal-body").html('<p>Você deseja realmente excluir esses dados?</p><button type="button" id="confirm_delete"class="btn btn-danger" data-table="'+$(this).data('table')+'" data-path="'+$(this).data('path')+'" data-id="'+$(this).data('id')+'">Excluir</button>');
@@ -120,6 +120,38 @@ $(function () {
 						
 					});
 
+			});
+			$('.aprove-btn').click(function function_name() {
+				$(".modal-title").html("Aprovar Horas");
+				$(".modal-body").html("<p>Esta alteração não poderá ser desfeita. Você tem certeza que quer continuar?</p><div class='text-center'><input type='button' class='btn btn-success' value='Alterar' id='confirm_approve' data-path='"+$(this).data('path')+"' data-id='"+$(this).data('id')+"'></div>");
+				$("#mymodal").modal();
+				$("#confirm_approve").click(function(event) {
+					/* Act on the event */
+					$.ajax({
+						url: $(this).data('path')+'/hours/approve/'+$(this).data('id'),
+						type: 'post',
+						dataType: 'json',
+					})
+					.done(function(data) {
+						if (data.success == 1) {
+							$(".modal-title").html("Aprovar Horas");
+							$(".modal-body").html("<p>Horas aprovadas com sucesso</p><div class='text-center'><input type='button' class='btn btn-success reload-btn' value='Recarregar' </div>");
+							$("#mymodal").modal();
+							$(".reload-btn").click(function(event) {
+							window.location.reload();
+							});
+						}else{
+
+						}
+					})
+					.fail(function() {
+						console.log("error");
+					})
+					.always(function() {
+						console.log("complete");
+					});
+					
+				}); 
 			})
 			$("#update_"+$('.inform-row').data('table')).submit(function(event) {
 				event.preventDefault();

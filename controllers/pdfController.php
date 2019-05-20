@@ -7,7 +7,7 @@ class pdfController extends controller
 	{	
 		$h = new Hours();
 		$data  =array();
-		
+		$percents = 0;
 		$data['department'] = $h-> getDepartment($_POST['sel_users']);
 		$data['company'] = $h-> getCompany($_POST['sel_users'])[0]['txt_name'];
 		$data['logo'] =  "assets/images/".strtolower($h->getCompany($_POST['sel_users'])[0]['txt_name'].".png");
@@ -20,6 +20,7 @@ class pdfController extends controller
 			$data["calchours"] = $_POST['hrs_hours'];
 		}else{
 			$data['calchours'] = $h-> calcHours($_POST['hrs_hours'],$_POST['dat_hourdate']);
+			$percents = $h->getPercents($_POST['dat_hourdate']);
 		}	
 
 		$onlyhours = explode('(', $data['calchours']);
@@ -37,8 +38,8 @@ class pdfController extends controller
 			'sel_bhtypes' => $_POST['sel_bhtypes'], 
 			'hrs_hours'=>$_POST['hrs_hours'],
 			'sel_users'=>$_COOKIE['intra_user'],
-			'hrs_calhours' => $onlyhours,
-			'txt_percents' => $h->getPercents($_POST['dat_hourdate']),
+			'hrs_calchours' => $onlyhours,
+			'txt_percents' => $percents,
 			'txt_weekday'=> $h->getDayName($_POST['dat_hourdate']),
 			'dat_hourdate'=>$_POST['dat_hourdate'],
 			'txt_motivation'=> $_POST['txt_motivation'],

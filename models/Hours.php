@@ -22,12 +22,8 @@
 
 		}
 
-		private function minutesToHours($time)
-		{
-			$hours = floor($time/60);
-			$minutes = $time%60;
-			return $hours.":".$minutes;
-
+		private function minutesToHours($minutes){
+			return str_pad(floor($minutes/60), 2, "0", STR_PAD_LEFT).":". str_pad($minutes%60, 2, "0", STR_PAD_LEFT);
 		}
 
 
@@ -353,35 +349,36 @@
 
 		public function approveHours($id)
 		{
-			$iduser = 0;
-			$negative = 0;
+			$iduser = "";
+			$addhour = 0;
 			$hours = 0;
-			$this -> query("SELECT * FROM hours WHERE id =".$id);
-			foreach ($this-> result() as $key => $value) {
-				$iduser = $value["sel_users"];
-				$hours = $value["hrs_hours"];
-			}
-			$this->query('SELECT * FROM users WHERE id ='.$iduser);
+			$total = 0;
+			//ADCIONAR HORAS PARA O USUÁRIO
+			$this -> query("SELECT * FROM hours WHERE id = ".$id);
 			foreach ($this->result() as $key => $value) {
-				$negative = $value['hrs_negativehours'];
+				$iduser = $value['sel_users'];
+				$addhour = $this->hoursToMinutes($value['hrs_calchours']);
+
 			}
 
-			$total = $this-> hoursToMinutes($negative) - $this-> hoursToMinutes($hours);
-
-			if ($total < 0 ) {
-				$total = -($total);
-				$total = $this->minutesToHours($total);
-				$this->update('users',array('hrs_negativehours' =>'00:00','hrs_hours'=> $total),array('id'=> $iduser));
-				$this->update('hours',array('sel_bhstatus' =>2),array('id'=>$id));
-			}else{
-				$total = $this->minutesToHours($total);
-				$this->update('users',array('hrs_negativehours'=>$total), array('id' =>$iduser));
-				$this->update('hours',array('sel_bhstatus'=>2),array('id'=>$id));
+			$this -> query("SELECT * FROM users WHERE id=".$iduser);
+			foreach ($this->result() as $key => $value) {
+				$hours = $this->hoursToMinutes($value['hrs_hours']);
 			}
 
+			$total = $hours + $addhour;
+			$total = $this->minutesToHours($total);
+
+			$this-> update('users',array('hrs_hours'=> $total),array('id'=> $iduser));
+			$this-> update('hours',array('sel_bhstatus'=>2),array('id'=> $id));
 
 			return true;
 
+		}
+
+		public function hoursToDays($hours)
+		{
+			$split = explode(':', $hours);
 		}
 
 		//load modules

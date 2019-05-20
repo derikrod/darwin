@@ -4,33 +4,11 @@
 	 */
 	class Late extends Model
 	{
-		public function listUserLates($id)
-		{
-			$html = '<div class="row module-div">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de atrasos</p>
-					
-							'.$this-> createTable('lates',array('sel_users' =>$id),'AND',false) .'
-						</div>
-					</div>';
-			return $html;
-		}
-
-		public function listAdminLates()
-		{
-			$html = '<div class="row module-div">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de atrasos</p>
-							<p class="text-center">
-							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_late_btn" class="btn btn-primary">Novo registro de atraso ou falta</button>
-							</p>
-							'.$this-> createTable('lates') .'
-						</div>
-					</div>';
-			return $html;
-		}
+		
 
 		public function getLateForm()
 		{
-			return $this-> createForm('lates','Adicionar');
+			return $this-> createForm('lates','Adicionar',0, array('sel_latestatus' =>1 ));
 		}
 		private function hoursToMinutes($time)
 		{	
@@ -60,11 +38,17 @@
 
 			return true;	
 		}
-		public function updateForm($id){
-			$l = new Late();
-			echo json_encode(array('form' =>$l-> getUpdateLateForm($id)));
-		}
-		
+	
+		public function getHours($id)
+		{
+		  $hours = 0;
+		  $this -> query('SELECT * FROM users WHERE id IN (SELECT sel_users FROM lates WHERE id = '.$id.')');
+		  foreach ($this->result() as $key => $value) {
+		  		$hours = $value['hrs_hours'];
+		  }
+
+		  return $hours;
+		}			
 		public function updateLate($data,$id)
 		{
 			$this-> query('SELECT * FROM users WHERE id = '.$data['sel_users']);
@@ -91,7 +75,7 @@
 		
 		public function getUpdateLateForm($id)
 		{
-			return $this -> createForm('lates', 'Atualizar',$id);
+			return $this -> createForm('lates', 'Atualizar',$id,array('sel_latestatus'=>1));
 		}
 
 
@@ -119,6 +103,91 @@
 			$this-> update('users',array('hrs_negativehours'=> $hours),array('id'=> $iduser));
 			$this-> delete('lates',array('id'=>$id));
 
-		}			
+		}
+
+		public function useHour($id)
+		{
+			
+			$iduser = 0;
+			$late = 0;
+			$users_hours = 0;
+			$this-> query('SELECT * FROM lates WHERE id = '.$id);
+			//1.pegar atrasos
+			foreach ($this->result() as $value) {
+				$iduser = $value['sel_users'];
+				$late = $this->hoursToMinutes($value["hrs_hours"]);
+			}
+
+			//2.conseguir horas extras compensações e 
+			$this -> query('SELECT * FROM users WHERE id ='.$iduser);
+			foreach ($this->result() as $key => $value) {
+				$user_hours = $this->hoursToMinutes($value['hrs_hours']); 
+				$negative = $this->hoursToMinutes($value['hrs_negativehours']);
+			}
+
+			$total = $user_hours - $late;
+			$total_negative = $negative - $late;
+
+			if ($total < 0) {
+				return false;
+			}else{
+			    $this -> update('users', array('hrs_hours'=>$this->minutesToHours($total),'hrs_negativehours'=>$this->minutesToHours($total_negative)),array('id' => $iduser));
+			    $this-> update('lates',array('sel_latestatus'=>2),array('id'=> $id));
+			    return true;
+			}
+		}
+
+
+		public function useMoney($id)
+		{
+			
+			$iduser = 0;
+			$late = 0;
+			$users_hours = 0;
+			$this-> query('SELECT * FROM lates WHERE id = '.$id);
+			//1.pegar atrasos
+			foreach ($this->result() as $value) {
+				$iduser = $value['sel_users'];
+				$late = $this->hoursToMinutes($value["hrs_hours"]);
+			}
+
+			//2.conseguir horas extras compensações e 
+			$this -> query('SELECT * FROM users WHERE id ='.$iduser);
+			foreach ($this->result() as $key => $value) {
+				$user_hours = $this->hoursToMinutes($value['hrs_hours']); 
+				$negative = $this->hoursToMinutes($value['hrs_negativehours']);
+			}
+
+			$total_negative = $negative - $late;
+
+			 $this -> update('users', array('hrs_negativehours'=>$this->minutesToHours($total_negative)),array('id' => $iduser));
+		    	$this-> update('lates',array('sel_latestatus'=>3),array('id'=> $id));
+			    return true;
+		}	
+
+		//modules
+		public function listUserLates($id)
+		{
+			$html = '<div class="row module-div">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de atrasos</p>
+					
+							'.$this-> createTable('lates',array('sel_users' =>$id),'AND',false) .'
+						</div>
+					</div>';
+			return $html;
+		}
+
+		public function listAdminLates()
+		{
+			$html = '<div class="row module-div">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de atrasos</p>
+							<p class="text-center">
+							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_late_btn" class="btn btn-primary">Novo registro de atraso ou falta</button>
+							</p>
+							'.$this-> createTable('lates',array('sel_latestatus'=>1),'AND',true,array('sel_latestatus')) .'
+						</div>
+					</div>';
+			return $html;
+		}		
 	}
  ?>

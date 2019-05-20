@@ -52,7 +52,7 @@
 		}
 		public function updateForm($id){
 			$l = new Late();
-			echo json_encode(array('form' =>$l-> getUpdateLateForm($id)));
+			echo json_encode(array('form' =>$l-> getUpdateLateForm($id),'hours'=> $l->getHours($id)));
 		}
 
 		public function addlate()
@@ -78,6 +78,26 @@
 			$l = new Late();
 			$l-> deleteLate($id);
 			echo json_encode(array('success'=> 1));
+		}
+
+		public function use_hours($id)
+		{
+			$l = new Late();
+			if ($l-> useHour($id)){
+				echo json_encode(array('success'=>1));
+			}else{
+				echo json_encode(array('success'=>0));
+			}
+		}
+
+		public function descount($id)
+		{
+			$l = new Late();
+			if ($l-> useMoney($id)){
+				echo json_encode(array('success'=>1));
+			}else{
+				echo json_encode(array('success'=>0));
+			}
 		}
 	 } 
  ?>

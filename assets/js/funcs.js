@@ -2,6 +2,7 @@ $(function () {
 	$('#login_form').on('submit', function(event) {
 		event.preventDefault();
 		/* Act on the event */
+		$("#btn_users_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
 		$.ajax({
 			url: $(this).data('path')+'/login/index/'+$("#txt_login").val()+'/'+$("#psw_pass").val(),
 			type: 'post',
@@ -13,6 +14,7 @@ $(function () {
 				window.location.reload();			
 			}else{
 				$("#error_display").html('Usuário e/ou senha inválido(s)!');
+				$("#btn_users_form").html('<input type="submit" class="btn btn-success" value="Entrar">');
 			}
 		})
 		.fail(function() {
@@ -40,6 +42,7 @@ $(function () {
 			$(".hours").mask('00:00');
 			$("#add_users").submit(function(event) {
 				event.preventDefault();
+				$("#btn_users_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
 				$.ajax({
 					url: $(this).data('path')+'/users/adduser',
 					type: 'post',
@@ -50,6 +53,13 @@ $(function () {
 					if (data.success == 1) {
 						$(".modal-title").html("Adicionar Usuário");
 						$(".modal-body").html('<p>Usuário Cadastrado com sucesso</p><button type="button" class="btn btn-success reload-btn">Recarregar Página</button>');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}else{
+						$(".modal-title").html("Adicionar Usuário");
+						$(".modal-body").html('<p>Ocorreu um erro inesperado</p><button type="button" class="btn btn-success reload-btn">Recarregar Página</button>');
 						$("#mymodal").modal();
 						$(".reload-btn").click(function(event) {
 							window.location.reload();
@@ -91,6 +101,9 @@ $(function () {
 			$("#sel_users").css('pointer-events','none');
 			$("#div_sel_bhstatus").html("");
 			$("#btn_hours_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary aprove-btn"  value="APROVAR" data-path="'+$("#update_hours").data('path')+'"data-id="'+$("#update_hours").data('id')+'">');
+			$("#btn_lates_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary pay-hours-btn"  value="USAR HORAS" data-toggle="tooltip" data-placement="bottom" title="Horas extas do colaborador: '+data.hours+' Horas" data-path="'+$("#update_lates").data('path')+'"data-id="'+$("#update_lates").data('id')+'">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-warning pay-money-btn"  value="DESCONTAR" data-path="'+$("#update_lates").data('path')+'"data-id="'+$("#update_lates").data('id')+'">');
+			$('[data-toggle="tooltip"]').tooltip()
+			/*remover dados*/
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
 					$(".modal-body").html('<p>Você deseja realmente excluir esses dados?</p><button type="button" id="confirm_delete"class="btn btn-danger" data-table="'+$(this).data('table')+'" data-path="'+$(this).data('path')+'" data-id="'+$(this).data('id')+'">Excluir</button>');
@@ -104,7 +117,7 @@ $(function () {
 						.done(function(data) {
 							if (data.success == 1) {
 								$(".modal-title").html("Remover dados");
-								$(".modal-body").html('<p>Dados removidos com sucesso</p><button type="button" class="btn btn-success reload-btn">Recarregar Página</button>');
+								$(".modal-body").html('<p>Dados removidos com sucesso</p><div class="text-center"><button type="button" class="btn btn-success reload-btn">Recarregar Página</button></div>');
 								$("#mymodal").modal();
 								$(".reload-btn").click(function(event) {
 									window.location.reload();
@@ -121,6 +134,8 @@ $(function () {
 					});
 
 			});
+			/*remover dados*/
+			/*aprovar horas extras*/
 			$('.aprove-btn').click(function function_name() {
 				$(".modal-title").html("Aprovar Horas");
 				$(".modal-body").html("<p>Esta alteração não poderá ser desfeita. Você tem certeza que quer continuar?</p><div class='text-center'><input type='button' class='btn btn-success' value='Alterar' id='confirm_approve' data-path='"+$(this).data('path')+"' data-id='"+$(this).data('id')+"'></div>");
@@ -153,7 +168,84 @@ $(function () {
 					
 				}); 
 			})
+			/*aprovar horas extras*/
+			/*compensar atrasos com horas*/
+			$('.pay-hours-btn').click(function function_name() {
+				$(".modal-title").html("Compensar Atrasos");
+				$(".modal-body").html("<p>Com essa opção você estará usando as horas extras do colaborador para compensar este atraso ou falta.<br>Esta alteração não poderá ser desfeita. Você tem certeza que quer continuar?</p><div class='text-center'><input type='button' class='btn btn-success' value='Alterar' id='confirm_use' data-path='"+$(this).data('path')+"' data-id='"+$(this).data('id')+"'></div>");
+				$("#mymodal").modal();
+				$("#confirm_use").click(function(event) {
+					/* Act on the event */
+					$.ajax({
+						url: $(this).data('path')+'/lates/use_hours/'+$(this).data('id'),
+						type: 'post',
+						dataType: 'json',
+					})
+					.done(function(data) {
+						if (data.success == 1) {
+							$(".modal-title").html("Compensar Atrasos");
+							$(".modal-body").html("<p>Horas compensadas com sucesso</p><div class='text-center'><input type='button' class='btn btn-success reload-btn' value='Recarregar'> </div>");
+							$("#mymodal").modal();
+							$(".reload-btn").click(function(event) {
+							window.location.reload();
+							});
+						}else{
+							$(".modal-title").html("Compensar Atrasos");
+							$(".modal-body").html("<p>O Usuário não tem horas o bastante para compensar este atraso.</p><div class='text-center'><input type='button' class='btn btn-success reload-btn' value='Recarregar'> </div>");
+							$("#mymodal").modal();
+							$(".reload-btn").click(function(event) {
+							window.location.reload();
+							});
+						}
+					})
+					.fail(function() {
+						console.log("error");
+					})
+					.always(function() {
+						console.log("complete");
+					});
+					
+				}); 
+			})
+			/*compensar atrasos com horas*/
+			/*descontar do salário*/
+			$('.pay-money-btn').click(function function_name() {
+				$(".modal-title").html("Descontar horas");
+				$(".modal-body").html("<p>Esta alteração atesta que os atrasos em questão serão descontados do salário do colaborador.<br> Esta alteração não poderá ser desfeita. Você tem certeza que quer continuar?</p><div class='text-center'><input type='button' class='btn btn-success' value='Alterar' id='confirm_approve' data-path='"+$(this).data('path')+"' data-id='"+$(this).data('id')+"'></div>");
+				$("#mymodal").modal();
+				$("#confirm_approve").click(function(event) {
+					/* Act on the event */
+					$.ajax({
+						url: $(this).data('path')+'/lates/descount/'+$(this).data('id'),
+						type: 'post',
+						dataType: 'json',
+					})
+					.done(function(data) {
+						if (data.success == 1) {
+							$(".modal-title").html("Aprovar Horas");
+							$(".modal-body").html("<p>Horas compensadas com sucesso</p><div class='text-center'><input type='button' class='btn btn-success reload-btn' value='Recarregar' </div>");
+							$("#mymodal").modal();
+							$(".reload-btn").click(function(event) {
+							window.location.reload();
+							});
+						}else{
+
+						}
+					})
+					.fail(function() {
+						console.log("error");
+					})
+					.always(function() {
+						console.log("complete");
+					});
+					
+				}); 
+			})
+			/*descontar do salário*/
+
+			/*atualizar dados*/
 			$("#update_"+$('.inform-row').data('table')).submit(function(event) {
+				$(this).hide();
 				event.preventDefault();
 				$.ajax({
 					url: $(this).data('path')+'/'+$(this).data('table')+'/update/'+$(this).data('id'),
@@ -189,7 +281,7 @@ $(function () {
 
 	});
 
-
+	/*atualizar dados*/
 
 	 $('.table').dataTable({
           "oLanguage": {
@@ -355,6 +447,9 @@ $(function () {
 				target: '_blank',
 				method: 'post'
 			});
+			$("#bh_pdf_form").submit(function () {
+				window.location.reload();
+			})
 			
 	 	})
 	 	.fail(function() {
@@ -370,6 +465,7 @@ $(function () {
 	 
 	 $("#add_late_btn").click(function(event) {
 	 	/* Act on the event */
+
 	 	$.ajax({
 	 		url: $(this).data('path')+'/lates/addform',
 	 		type: 'post',
@@ -381,6 +477,7 @@ $(function () {
 			$("#mymodal").modal();
 			$(".hours").mask('00:00');
 			$("#add_lates").submit(function(event) {
+				$("#btn_lates_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
 				/* Act on the event */
 				event.preventDefault();
 				$.ajax({
@@ -391,20 +488,20 @@ $(function () {
 				})
 				.done(function(data) {
 					if (data.success == 1) {
-									$(".modal-title").html("Adicionar Atraso");
-									$(".modal-body").html('<p>Atraso cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
-									$("#mymodal").modal();
-									$(".reload-btn").click(function(event) {
-										window.location.reload();
-									});
-								}else{
-									$(".modal-title").html("Adicionar Atraso");
-									$(".modal-body").html('<p>Ocorreu um erro ao cadastrar o Atraso</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
-									$("#mymodal").modal();
-									$(".reload-btn").click(function(event) {
-										window.location.reload();
-									});
-								}
+						$(".modal-title").html("Adicionar Atraso");
+						$(".modal-body").html('<p>Atraso cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}else{
+						$(".modal-title").html("Adicionar Atraso");
+						$(".modal-body").html('<p>Ocorreu um erro ao cadastrar o Atraso</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}
 				})
 				.fail(function() {
 					console.log("error");

@@ -183,32 +183,43 @@ class model{
 			$this -> query($sql);
 			$form = '<form  id="add_'.$table.'" data-path='.BASE_URL.'><span id="error_display" class="text-center"></span>';
 
+			$exclude = array();
+
+			if (count($hiddens) > 0) {
+				foreach ($hiddens as $key => $value) {
+					$form.= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
+					array_push($exclude, $key);
+				}
+			}
 			foreach ($this->result() as $key => $value) {
 				$required = "";
 				if ($value['IS_NULLABLE'] == 'NO') {
 					$required = "required";
 				}
 				$split_key = explode('_', $value['COLUMN_NAME']);
-				if ($value['COLUMN_NAME'] != 'id' && $split_key[0] != 'non') {
+				if ($value['COLUMN_NAME'] != 'id' && $split_key[0] != 'non' && !in_array($value['COLUMN_NAME'], $exclude)) {
 					$form .= '<div class="form-group" id="div_'.$value["COLUMN_NAME"].'"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
 				}	
 			}
-			if (count($hiddens) > 0) {
-				foreach ($hiddens as $key => $value) {
-					$form.= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
-				}
-			}
+			
 			$form.='<div id="btn_'.$table.'_form" class="text-center"><input type="submit" class="btn btn-success" value="'.$submit_text.'"></div></form>';
 			return $form;
 		}else{
 			$sql = "SELECT * FROM ".$table." WHERE id = ".$id;
 			$this->query($sql);
 			$form = '<form  id="update_'.$table.'" data-path="'.BASE_URL.'"" data-id="'.$id.'" data-table="'.$table.'">';
-			$list = '<ul>';
+			$exclude = array();
+
+			if (count($hiddens) > 0) {
+				foreach ($hiddens as $key => $value) {
+					$form.= '<input type="hidden" id="'.$key.'" name="'.$key.'" value="'.$value.'">';
+					array_push($exclude, $key);
+				}
+			}
 			$res = $this -> result();
 			foreach ($res[0] as $key => $value) {
 				$sql_label = "";
-				if(!is_numeric($key) && $key != 'id' && substr($key, 0,3) != 'psw'){
+				if(!is_numeric($key) && $key != 'id' && substr($key, 0,3) != 'psw' && !in_array($key, $exclude)){
 				 	$sql_label = "SELECT COLUMN_COMMENT,IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table."' AND COLUMN_NAME ='".$key."' ;";
 				 		$this-> query($sql_label);
 				 		$res = $this->result();
@@ -217,12 +228,12 @@ class model{
 				 			$required = "required";
 				 		}
 				 		$form .= '<div class="form-group" id="div_'.$key.'"><label for="'.$key.'">'.utf8_encode($res[0][0]).'</label>'.$this->get_input(substr($key, 0,3),$key,$required,$value).'</div>';
-				 		$list .= '<li>'.$sql_label.'</li>';
+				 		
 				 }
 				
 				
 			}
-			$list .= '</ul>';
+		
 			$form.='<div class="text-center" id="btn_'.$table.'_form"><input type="submit" class="btn btn-success" value="'.$submit_text.'">&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" id="remove_btn" data-id="'.$id.'" data-path="'.BASE_URL.'" data-table="'.$table.'">Remover</button></div> </form>';
 			return $form;	
 		}

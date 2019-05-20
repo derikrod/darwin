@@ -1,4 +1,9 @@
 $(function () {
+	/*remover dados*/
+			$("#user_hours_div>table>tbody>tr").each(function() {
+				$(this).addClass('pdf_hours');
+			});
+	//login
 	$('#login_form').on('submit', function(event) {
 		event.preventDefault();
 		/* Act on the event */
@@ -28,7 +33,7 @@ $(function () {
 		document.cookie = "intra_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		window.location.assign($(this).data('path'));
 	});
-
+	//adicionar usuário
 	$("#add_user_btn").click(function() {
 		$.ajax({
 			url: $(this).data('path')+'/users/addform',
@@ -86,7 +91,7 @@ $(function () {
 		
 		
 	});
-	
+	//update
 	$('.inform-row').click(function() {
 		$.ajax({
 			url: $(this).data('path')+'/'+$(this).data('table')+'/updateForm/'+$(this).data('id'),
@@ -134,7 +139,7 @@ $(function () {
 					});
 
 			});
-			/*remover dados*/
+			
 			/*aprovar horas extras*/
 			$('.aprove-btn').click(function function_name() {
 				$(".modal-title").html("Aprovar Horas");
@@ -462,6 +467,12 @@ $(function () {
 	 });
 
 
+	 /*gerar pdf via id*/
+	 $(".pdf_hours").click(function() {
+	 	$(".modal-title").html("Gerar documento");
+			$(".modal-body").html('<p>Por favor, verifique se as informações do documento estão corretas.</p><p>Este documento deve ser impresso e as assinaturas dos responsáveis devem ser colhidas.</p><form method="post" action="'+$(this).data('path')+'/pdf/load/'+$(this).data('id')+'" target="blank"><div class="text-center"><input type="submit" class="btn btn-success" value="Gerar PDF"></div></form>');
+			$("#mymodal").modal();
+	 });
 	 
 	 $("#add_late_btn").click(function(event) {
 	 	/* Act on the event */
@@ -520,6 +531,8 @@ $(function () {
 	 	});
 	 	
 	 });
+
+
 
 });
 

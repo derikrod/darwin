@@ -223,7 +223,7 @@
 				$lates = 1;
 			}
 			$html = '<div class="row module-div">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas aprovadas</p>
+						<div  id="user_hours_div" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas aprovadas</p>
 						<p class="text-center">
 							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_bh_btn" data-lates="'.$lates.'" class="btn btn-primary">Novo formulário de banco de horas</button>
 						</p>
@@ -232,6 +232,12 @@
 						</div>
 					</div>';
 			return $html;
+		}
+
+		public function getHours($id)
+		{
+			$this->query('SELECT * FROM hours WHERE id= '.$id);
+			return $this->result();
 		}
 		public function listAdminHours()
 		{
@@ -379,6 +385,11 @@
 		public function hoursToDays($hours)
 		{
 			$split = explode(':', $hours);
+			$days = floor(intval($split[0])/8);
+			$hours = intval($split[0])%8;
+			$minutes = $split[1];
+
+			return($days." Dias ".$hours." Horas e ".$minutes." Minutos");
 		}
 
 		//load modules
@@ -392,8 +403,8 @@
 				$hoursmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="col-xs-12 module-div">
 										<br><h3>Banco de Horas</h3><br>
-										<p><b>Horas extras</b> '.$this-> getPositiveHours($iduser).'</p>
-										<p><b>Horas negativas</b> '.$this-> getNegative($iduser).'</p>
+										<p><b>Horas extras</b> '.$this-> getPositiveHours($iduser).' ('.$this->hoursToDays($this-> getPositiveHours($iduser)).')</p>
+										<p><b>Horas negativas</b> '.$this-> getNegative($iduser).' ('.$this->hoursToDays($this-> getNegative($iduser)).')</p>
 										<br>
 										<hr>
 										<p class="text-right"><a href="'.BASE_URL.'/hours" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates" class="btn btn-danger">Meus Atrasos</a></p>

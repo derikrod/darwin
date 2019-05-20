@@ -351,7 +351,7 @@ class model{
 			if ($editable) {
 				$table .= '<tr class="inform-row" data-table="'.$table_name.'" data-id="'.$intraarray['id'].'" data-path="'.BASE_URL.'">';
 			}else{
-				$table .= '<tr>';
+				$table .= '<tr data-id="'.$intraarray['id'].'" data-path="'.BASE_URL.'">';
 			}
 			
 			foreach ($intraarray as $key => $value) {

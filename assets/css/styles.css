@@ -13,7 +13,10 @@
   width: 100%;
 
 }
-
+.pdf_hours:hover{
+  cursor: pointer;
+  background-color: #D1DED8;
+}
 #log_intra_div{
 	background-color:#F8FBF7;min-height: 320px;box-shadow: 2px 2px 2px #666;
 

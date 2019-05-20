@@ -532,7 +532,27 @@ $(function () {
 	 	
 	 });
 
-
+	 $("#showcalc").click(function(event) {
+	 	
+	 	/* Act on the event */
+	 	$.ajax({
+	 		url: $(this).data('path')+'/calc/',
+	 		type: 'post',
+	 		dataType: 'json',
+	 	})
+	 	.done(function(data) {
+	 		$(".modal-title").html("Calculadora de produtos");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+	 	})
+	 	.fail(function() {
+	 		console.log("error");
+	 	})
+	 	.always(function() {
+	 		console.log("complete");
+	 	});
+	 	
+	 });
 
 });
 

@@ -32,7 +32,8 @@
            
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          	 <p class="navbar-text">Bem vindo <b><?php echo $name?>&nbsp;&nbsp;<a href="#" id="logout_btn" data-path= "<?php echo BASE_URL?>"><span class="glyphicon glyphicon-off" aria-hidden="true" title="Sair"></span> Sair</a></b> </p> 
+          	 
+             <p class="navbar-text"> <a href="<?php echo BASE_URL ?>" style="color:white;"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Página principal</a> | <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b><?php echo $name?> | <a href="#" id="logout_btn" data-path= "<?php echo BASE_URL?>"><span class="glyphicon glyphicon-off" aria-hidden="true" title="Sair"></span> Sair</a></b> </p> 
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -53,6 +54,9 @@
         }
          if (isset($bhadmmodule)) {
           echo($bhadmmodule);       
+        }
+         if (isset($calcmodule)) {
+          echo($calcmodule);       
         }
     	?>
     </div>

@@ -58,6 +58,10 @@
          if (isset($calcmodule)) {
           echo($calcmodule);       
         }
+
+         if (isset($birthdaymodule)) {
+          echo($birthdaymodule);       
+        }
     	?>
     </div>
 		

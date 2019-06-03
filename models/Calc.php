@@ -19,7 +19,7 @@
 										<br>
 										<br>
 										<br>
-										<br>
+										
 										<hr>
 										<p class="text-right"><a href="#" id="showcalc" data-path="'.BASE_URL.'" class="btn btn-success">Calculadora</a>
 									</div>

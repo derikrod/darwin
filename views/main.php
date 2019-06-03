@@ -62,6 +62,14 @@
          if (isset($birthdaymodule)) {
           echo($birthdaymodule);       
         }
+
+         if (isset($contactmodule)) {
+          echo($contactmodule);       
+        }
+
+          if (isset($callsmodule)) {
+          echo($callsmodule);       
+        }
     	?>
     </div>
 		

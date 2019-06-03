@@ -8,6 +8,8 @@
 			$h = new Hours();
 			$c = new Calc();
 			$b = new Birthday();
+			$cont = new Contact();
+			$cll = new Calls();
 
 			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
 				$dados =  array();
@@ -22,6 +24,8 @@
 				$dados["bhadmmodule"] = $h-> loadAdminHoursModule(5,$_COOKIE["intra_user"]);
 				$dados["calcmodule"] = $c-> loadCalcModule(6,$_COOKIE["intra_user"]);
 				$dados["birthdaymodule"] = $b-> loadBirthdayModule(7,$_COOKIE["intra_user"]);
+				$dados["contactmodule"] = $cont-> loadContactModule(8,$_COOKIE["intra_user"]);
+				$dados["callsmodule"] = $cll-> loadCallsModule(9,$_COOKIE["intra_user"]);
 				$this->loadTemplate('main',$dados);
 			}else{
 				$dados = array(

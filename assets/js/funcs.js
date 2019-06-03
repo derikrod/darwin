@@ -173,7 +173,7 @@ $(function () {
 					
 				}); 
 			})
-			/*aprovar horas extras*/
+			
 			/*compensar atrasos com horas*/
 			$('.pay-hours-btn').click(function function_name() {
 				$(".modal-title").html("Compensar Atrasos");
@@ -554,6 +554,29 @@ $(function () {
 	 	
 	 });
 
+	 /*contatos*/
+	$("#contact_form").submit(function(event) {
+		event.preventDefault();
+		$.ajax({
+			url: $(this).data('path')+"/contacts/get",
+			type: 'post',
+			dataType: 'json',
+			data: $("#contact_form").serialize(),
+		})
+		.done(function(data) {
+			$(".modal-title").html("Contatos");
+			$(".modal-body").html(data.list);
+			$("#mymodal").modal();
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+	/*contatos*/
 });
 
 //auxiliares

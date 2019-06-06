@@ -80,7 +80,18 @@ class model{
 	public function ptBRdate($date)
 	{
 		$split_date = explode('-', $date);
-		return $split_date[2]."/".$split_date[1]."/".$split_date[0];
+		$day_split = explode(" ", $split_date[2]);
+		$day = "";
+		$hours = "";
+		if (count($day_split) > 1) {
+			$day = $day_split[0];
+			$hours = $day_split[1];
+		}else{
+			$day = $split_date[2];
+		}
+
+
+		return $day."/".$split_date[1]."/".$split_date[0]." ".$hours;
 	}
 	//construtor de formulários
 	//1.selects

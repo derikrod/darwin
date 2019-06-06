@@ -2,10 +2,12 @@
 	/**
 	 * 
 	 */
+
 	class Core 
 	{
 		public function run()
-		{
+		{	
+			date_default_timezone_set('America/Sao_Paulo');
 			$url = '/';
 			if(isset($_GET['url'])){
 				$url.=$_GET['url'];

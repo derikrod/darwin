@@ -3,7 +3,7 @@
 	/**
 	 * 
 	 */
-	class calc extends Model
+	class calc extends model
 	{
 		//module
 		public function loadCalcModule($idmodule,$iduser)
@@ -17,9 +17,8 @@
 									<div class="col-xs-12 module-div">
 										<br><h3>Calculadora de produtos</h3><br>
 										<br>
-										<br>
-										<br>
-										
+										<p>&nbsp;</p>	
+                    <p>&nbsp;</p> 									
 										<hr>
 										<p class="text-right"><a href="#" id="showcalc" data-path="'.BASE_URL.'" class="btn btn-success">Calculadora</a>
 									</div>

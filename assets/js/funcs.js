@@ -577,6 +577,53 @@ $(function () {
 		
 	});
 	/*contatos*/
+
+	/*ti*/
+	$("#newcall_btn").click(function(event) {
+		$.ajax({
+			url: $(this).data('path')+'/calls/getuserform/'+$(this).data('id'),
+			type: 'post',
+			dataType: 'json'
+		})
+		.done(function(data) {
+			$(".modal-title").html("Novo Chamado");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+			$("#add_calls").submit(function(event) {
+				event.preventDefault();
+				$("#btn_calls_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
+				$.ajax({
+					url: $(this).data('path')+"/calls/add",
+					type: 'post',
+					dataType: 'json',
+					data: $("#add_calls").serialize(),
+				})
+				.done(function(data) {
+					$(".modal-title").html("Novo Chamado");
+						$(".modal-body").html('<p>Chamado cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">&nbsp;&nbsp;<a href="'+data.path+'/calls" class="btn btn-primary">LISTA DE CHAMADOS</a>');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+	/*ti*/
 });
 
 //auxiliares

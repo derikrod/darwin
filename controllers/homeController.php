@@ -9,7 +9,7 @@
 			$c = new Calc();
 			$b = new Birthday();
 			$cont = new Contact();
-			$cll = new Calls();
+			$cll = new Call();
 
 			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
 				$dados =  array();

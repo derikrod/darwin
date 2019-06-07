@@ -40,9 +40,20 @@
   margin-top: 10px;
   margin-bottom: 10px; 
 }
-
+.mymodule{
+  box-shadow: 3px 3px 3px #222;
+ margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0;
+}
 .navbar-default {
-    background-color: #172A3A!important;
+   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#172a3a+0,53679b+100 */
+background: #172a3a; /* Old browsers */
+background: -moz-linear-gradient(left,  #172a3a 0%, #53679b 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  #172a3a 0%,#53679b 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  #172a3a 0%,#53679b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', endColorstr='#53679b',GradientType=1 ); /* IE6-9 */
+
     border:0;
     color:#F0F7EE!important;
 }
@@ -50,7 +61,19 @@
 .navbar-default .navbar-text {
     color:#F0F7EE!important;
 }
+.module-card{
+  height: 170px;
+}
 
+.module-card> img{
+  width: 100%;
+}
+
+.module-buttons{
+  background: #F8FBF7;
+  height: 150px;
+  padding: 10px;
+}
 .btn-success{
   background-color: #89C26C!important;
   border:0 !important;

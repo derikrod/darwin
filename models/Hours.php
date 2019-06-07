@@ -222,7 +222,9 @@
 			if ($this-> isNegative($id)) {
 				$lates = 1;
 			}
-			$html = '<div class="row module-div">
+			$html = '
+					
+				   <div class="row module-div">
 						<div  id="user_hours_div" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas aprovadas</p>
 						<p class="text-center">
 							<button type="button" data-path="'.BASE_URL.'" data-iduser="'.$_COOKIE['intra_user'].'" id="add_bh_btn" data-lates="'.$lates.'" class="btn btn-primary">Novo formulário de banco de horas</button>
@@ -401,15 +403,22 @@
 				return $hoursmodule;
 			}else{
 				$hoursmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="col-xs-12 module-div">
-										<br><h3>Banco de Horas</h3><br>
-										<p><b>Horas extras</b> '.$this-> getPositiveHours($iduser).' ('.$this->hoursToDays($this-> getPositiveHours($iduser)).')</p>
-										<p><b>Horas negativas</b> '.$this-> getNegative($iduser).' ('.$this->hoursToDays($this-> getNegative($iduser)).')</p>
-										<br>
-										<hr>
-										<p class="text-right"><a href="'.BASE_URL.'/hours" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates" class="btn btn-danger">Meus Atrasos</a></p>
+									<div class="col-xs-12 mymodule">
+									<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/userhours.png\');background-position:bottom right;background-size:cover;">
+												
 									</div>
-							  </div>';
+									<div class="row">
+										
+										<div class="module-buttons">
+											<p><b>Banco de horas</b></p>
+											<p><b>Horas extras</b> '.$this-> getPositiveHours($iduser).' ('.$this->hoursToDays($this-> getPositiveHours($iduser)).')</p>
+											<p><b>Horas negativas</b> '.$this-> getNegative($iduser).' ('.$this->hoursToDays($this-> getNegative($iduser)).')</p>
+											<p class="text-right"><a href="'.BASE_URL.'/hours" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates" class="btn btn-danger">Meus Atrasos</a></p>
+										</div>
+									</div>							
+									</div>
+							  </div>
+						';
 
 				return $hoursmodule;
 			}
@@ -423,17 +432,24 @@
 			if (!$this->check_modules($idmodule,$iduser)) {
 				return $hoursmodule;
 			}else{
-				$hoursmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="col-xs-12 module-div">
-										<br><h3>Banco de Horas (administração)</h3><br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<hr>
-										<p class="text-right"><a href="'.BASE_URL.'/hours/admin" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates/admin" class="btn btn-danger">Cadastrar Atrasos</a></p>
+				$hoursmodule = '
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<div class="col-xs-12 mymodule">
+									<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/adminhours.png\');background-position:bottom right;background-size:cover;">
+												
 									</div>
-							  </div>';
+									<div class="row">
+										
+										<div class="module-buttons">
+											<p><b>Banco de horas (Administração)</b></p>
+											<p>Administração do banco de horas dos colaboradores.</p>
+											<p>&nbsp;</p>
+											<p class="text-right"><a href="'.BASE_URL.'/hours/admin" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates/admin" class="btn btn-danger">Cadastrar Atrasos</a></p>
+										</div>
+									</div>							
+									</div>
+							  </div>
+							';
 
 				return $hoursmodule;
 			}

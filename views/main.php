@@ -59,9 +59,7 @@
           echo($calcmodule);       
         }
 
-         if (isset($birthdaymodule)) {
-          echo($birthdaymodule);       
-        }
+       
 
          if (isset($contactmodule)) {
           echo($contactmodule);       
@@ -69,6 +67,12 @@
 
           if (isset($callsmodule)) {
           echo($callsmodule);       
+        }
+          if (isset($admincallsmodule)) {
+          echo($admincallsmodule);       
+        }
+          if (isset($birthdaymodule)) {
+          echo($birthdaymodule);       
         }
     	?>
     </div>

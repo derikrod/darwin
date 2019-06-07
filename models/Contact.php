@@ -29,19 +29,26 @@ class Contact extends model
 				return $contactmodule;
 			}else{
 				$contactmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="col-xs-12 module-div">
-										<br><h3>Procurar Contato</h3>
-										
-										<form action="" id="contact_form" style="margin-top:14px;margin-bottom:8px;" data-path="'.BASE_URL.'">
-											<div class="form-group"><label for="txt_name">Nome do colaborador</label><input type="text" id="txt_name" name="txt_name" required class="form-control"></div>
-											<br>
-											<hr>
+                  <div class="col-xs-12 mymodule">
+                  <div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/contacts.png\');background-position:bottom right;background-size:cover;">
+                        
+                  </div>
+                  <div class="row">
+                    
+                    <div class="module-buttons">
+                      <p><b>Procurar Contato (Lista de Ramais)</b></p>
+                     <form action="" id="contact_form" style="margin-top:14px;margin-bottom:8px;" data-path="'.BASE_URL.'">
+											<div class="form-group"><input type="text" id="txt_name" name="txt_name" required class="form-control" placeholder="Nome do colaborador"></div>
+											
 											<div class="text-right">
-											<input type="submit" value="Procurar" class="btn btn-success">&nbsp;&nbsp;<a href="'.BASE_URL.'/contacts" class="btn btn-primary">LISTA DE CONTATOS</a>
+                     <input type="submit" value="Procurar" class="btn btn-success">&nbsp;&nbsp;<a href="'.BASE_URL.'/contacts" class="btn btn-primary">LISTA DE CONTATOS</a>
 											</div>
 										</form>
-									</div>
-							  </div>';
+                    </div>
+                  </div>              
+                  </div>
+                   </div>
+               ';
 
 				return $contactmodule;
 			}

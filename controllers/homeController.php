@@ -26,6 +26,7 @@
 				$dados["birthdaymodule"] = $b-> loadBirthdayModule(7,$_COOKIE["intra_user"]);
 				$dados["contactmodule"] = $cont-> loadContactModule(8,$_COOKIE["intra_user"]);
 				$dados["callsmodule"] = $cll-> loadCallsModule(9,$_COOKIE["intra_user"]);
+				$dados["admincallsmodule"] = $cll-> loadAdminCallsModule(10,$_COOKIE["intra_user"]);
 				$this->loadTemplate('main',$dados);
 			}else{
 				$dados = array(

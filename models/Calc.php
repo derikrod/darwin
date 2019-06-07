@@ -13,16 +13,23 @@
 			if (!$this->check_modules($idmodule,$iduser)) {
 				return $calcmodule;
 			}else{
-				$calcmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="col-xs-12 module-div">
-										<br><h3>Calculadora de produtos</h3><br>
-										<br>
-										<p>&nbsp;</p>	
-                    <p>&nbsp;</p> 									
-										<hr>
-										<p class="text-right"><a href="#" id="showcalc" data-path="'.BASE_URL.'" class="btn btn-success">Calculadora</a>
-									</div>
-							  </div>';
+				$calcmodule = '
+              <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                  <div class="col-xs-12 mymodule">
+                  <div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/calc.png\');background-position:bottom right;background-size:cover;">
+                        
+                  </div>
+                  <div class="row">
+                    
+                    <div class="module-buttons">
+                      <p><b>Calculadora de produtos</b></p>
+                      <p>Calculadora de preço dos produto da equipe comercial.</p>
+                      <p>&nbsp;</p>
+                      <p class="text-right"><a href="#" id="showcalc" data-path="'.BASE_URL.'" class="btn btn-success">Calculadora</a>
+                    </div>
+                  </div>              
+                  </div>
+                </div>';
 
 				return $calcmodule;
 			}

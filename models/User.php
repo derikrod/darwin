@@ -96,15 +96,21 @@
 			if (!$this->check_modules($idmodule,$iduser)) {
 				return $usermodule;
 			}else{
-				$usermodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="col-xs-12 module-div">
-									<br><h3>Usuários</h3><br>
-									<p><b>Número de usuários cadastrados: </b> '.$this-> count_users().'</p>
-									<p>&nbsp;</p>
-									<br>
-									<hr>
-									<p class="text-right"><a href="'.BASE_URL.'/users" class="btn btn-success">Lista de usuários</a></p>
-									
+				$usermodule = '
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<div class="col-xs-12 mymodule">
+									<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/users.png\')">
+												
+									</div>
+									<div class="row">
+										
+										<div class="module-buttons">
+											<p><b>Usuários</b></p>
+											<p><b>Número de usuários cadastrados: </b> '.$this-> count_users().'</p>
+											<p>&nbsp;</p>
+											<p class="text-right"><a href="'.BASE_URL.'/users" class="btn btn-success">Lista de usuários</a></p>
+										</div>
+									</div>							
 									</div>
 							  </div>';
 

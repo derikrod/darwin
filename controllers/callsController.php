@@ -63,6 +63,57 @@
 				echo json_encode(array('success'=>0));
 			}
 		}
+
+		public function admin($type)
+		{
+			$u = new User();
+			$cll = new Call();
+
+			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
+				$dados =  array();
+				foreach ($u-> getUserInformation($_COOKIE["intra_user"]) as $key => $value) {
+					$username = $value["txt_name"];
+				}
+				$dados["name"] = $username;
+				switch ($type) {
+				
+				case 1:
+					$dados["callsmodule"] = $cll-> adminTable();
+					break;
+				
+				case 2:
+					$dados["callsmodule"] = $cll-> adminLibrary();
+					break;
+				}
+
+				$this->loadTemplate('main',$dados);
+			}else{
+				$dados = array(
+				'form'=> $u-> getLoginForm( array('txt_login','psw_pass'),'users','Entrar','login'));
+				$this->loadTemplate('home',$dados);
+			}
+
+
+		}
+
+		public function getupdatestatus($idcall){
+			$cll = new Call();
+
+			echo json_encode(array('form'=>$cll-> getUpdateStatusForm($idcall)));
+		}
+
+		public function updatestatus()
+		{
+			$cll = new Call();
+			$cll -> setUpdateStatus($_POST);
+			echo json_encode(array('success'=>0));
+		}
+
+		public function getsolution($id)
+		{
+			$cll = new Call();
+			echo json_encode(array('solution' => $cll-> getRelatory($id)));
+		}
 	}
 
 ?>

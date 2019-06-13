@@ -22,7 +22,7 @@
 
 		public function getAdminCall()
 		{
-			$description = 'Nenhum chamado aberto';
+			$description = '<p>Nenhum chamado aberto</p><p>&nbsp;</p>';
 			$status = '';
 			$number = 0;
 			$sql = 'SELECT * FROM calls WHERE sel_callstatus = 1';
@@ -145,6 +145,65 @@
 				}
 	 	}
 
+	 	public function adminTable()
+	 	{	
+	 		return '<div id="admin_unsolvedcalls_div" class="col-xs-10 col-xs-offset-1 module-div"><h3 class="text-center"> Lista de pendências</h3><p class="text-right"><a href="'.BASE_URL.'/calls/admin/2"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Biblioteca de chamados</a></p>'.
+	 		$this -> createTable('calls',array('sel_callstatus'=> 2), 'AND', false, array('lgt_resolution','caller','sponsor'),'<>')
+	 		.'</div>';
+	 	}
+
+	 	public function adminLibrary()
+	 	{	return '<div id="admin_solvedcalls_div" class="col-xs-10 col-xs-offset-1 module-div"><h3 class="text-center"> Chamados Resolvidos</h3><p class="text-right"><a href="'.BASE_URL.'/calls/admin/1"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Chamdos Pendentes</a></p>'.
+	 		$this -> createTable('calls',array('sel_callstatus'=> 2), 'AND', false,array('lgt_resolution','caller'))  
+	 		.'</div>';
+	 	}
+
+	 	public function getUserName($iduser)
+	 	{
+	 		$this -> query('SELECT * FROM users WHERE id='.$iduser);
+	 		$username= "";
+	 		foreach ($this->result() as $key => $value) {
+	 			$username= $value['txt_name'];
+	 			# code...
+	 		}
+
+	 		return $username;
+	 	}
+
+	 	public function getUpdateStatusForm($idcall)
+	 	{	$this -> query("SELECT * FROM calls WHERE id = ".$idcall);
+	 		$motivation = "";
+	 		foreach ($this-> result() as $key => $value) {
+	 			$motivation = "<p><b>Motivo do chamado:</b>".$value['txt_motivation']."</p>";
+	 		}
+	 		$form = $motivation;
+	 		$form .= $this -> getSmForm(array('sel_callstatus','lgt_resolution'),'calls','ATUALIZAR','updatecallstatus',array('id'=>$idcall));
+	 		return $form;
+
+	 	}
+
+	 	public function setUpdateStatus($data)
+	 	{	$data['sponsor'] = $this-> getUserName($_COOKIE['intra_user']);
+	 		$this -> update('calls',$data,array('id'=> $data['id']));
+	 	}
+
+
+	 	public function getRelatory($id)
+	 	{
+	 		$this -> query('SELECT * FROM calls WHERE id ='.$id);
+	 		$relatory = "";
+	 		foreach ($this-> result() as $key => $value) {
+	 			$relatory = "<p><b>Usuário com problemas: </b> ".$this-> getUserName($value['sel_users'])."</p>
+	 						<p><b>Motivo: </b> ".$value['txt_motivation']."</p>
+	 						<p><b>Descrição :</b> ".$value['lgt_desc']."</p>
+	 						<p><b>Responsável pela resolução: </b> ".$value['sponsor']."</p>
+	 						<p><b>Resolução:</b> ".$value['lgt_resolution']."</p>
+	 						<br><br>";
+	 		}
+
+	 		return $relatory;
+
+	 	}
 	}
 
 ?>

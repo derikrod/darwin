@@ -176,9 +176,12 @@ class model{
 				break;
 			case 'eml':
 				$input = '<input type="email" name ="'.$name.'" id="'.$name.'" value="'.$value.'" class="form-control" '.$required.'>';
-				break;	
+				break;
+			case 'fle':
+				$input = '<input type="file" id="'.$name.'" name="'.$name.'" accept="application/pdf" '.$required.'>';
+				break;		
 			default:
-				$input = "";
+				$input = '';
 				break;		
 		}
 
@@ -192,7 +195,7 @@ class model{
 		if ($id == 0 ) {
 			$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table."';";
 			$this -> query($sql);
-			$form = '<form  id="add_'.$table.'" data-path='.BASE_URL.'><span id="error_display" class="text-center"></span>';
+			$form = '<form  id="add_'.$table.'" data-path='.BASE_URL.' enctype="multipart/form-data"><span id="error_display" class="text-center"></span>';
 
 			$exclude = array();
 
@@ -254,7 +257,7 @@ class model{
 	//criador de formulários com campos específicos
 	public function getSmForm($fields = array(),$table,$submit_text,$form_name,$hiddens = array())
 	{
-		$form = '<form id="'.$form_name.'_form" data-path='.BASE_URL.'><span id="error_display" class="text-center"></span>';
+		$form = '<form id="'.$form_name.'_form" data-path='.BASE_URL.' enctype="multipart/form-data"><span id="error_display" class="text-center"></span>';
 		foreach ($fields as $key => $value) {
 			$fields[$key] = "COLUMN_NAME = '".$value."'";
 		}
@@ -326,7 +329,7 @@ class model{
 			return false;
 		}
 	}
-	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true,$exclude = array())
+	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true,$exclude = array(),$operator = '=')
 	{
 		$table = "";
 		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table_name."';";
@@ -341,9 +344,10 @@ class model{
 
 		$table .= '</thead><tbody>';
 		$conditional = "";
+		
 		if (count($condition)>0) {
 			foreach ($condition as $key => $value) {
-				$condition[$key] = $key." = '".$value."'";
+				$condition[$key] = $key." ".$operator." '".$value."'";
 
 			}
 			$conditional = 'WHERE '.implode(' '.$where_cond.' ', $condition);

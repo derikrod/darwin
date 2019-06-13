@@ -40,38 +40,63 @@
     </nav>
     <div class="row">
     	<?php
-    		 if (isset($trellomodule)) {
+        //trello
+  		  if (isset($trellomodule)) {
           echo($trellomodule);       
         }
+
+        //usuários
         if (isset($usermodule)) {
     			echo($usermodule);    		
     		}
+
+        // eventos
         if (isset($eventmodule)) {
           echo($eventmodule);       
         }
-         if (isset($bhmodule)) {
+
+        // banco de horas
+        if (isset($bhmodule)) {
           echo($bhmodule);       
         }
-         if (isset($bhadmmodule)) {
+
+        //banco de horas admin
+        if (isset($bhadmmodule)) {
           echo($bhadmmodule);       
         }
-         if (isset($calcmodule)) {
+
+        //calculadora
+        if (isset($calcmodule)) {
           echo($calcmodule);       
         }
 
-       
-
-         if (isset($contactmodule)) {
+        //ramais      
+        if (isset($contactmodule)) {
           echo($contactmodule);       
         }
 
-          if (isset($callsmodule)) {
+        //chamados
+        if (isset($callsmodule)) {
           echo($callsmodule);       
         }
-          if (isset($admincallsmodule)) {
+
+        //chamados administração
+        if (isset($admincallsmodule)) {
           echo($admincallsmodule);       
         }
-          if (isset($birthdaymodule)) {
+
+        //boletins
+        if (isset($newsmodule)) {
+          echo($newsmodule);       
+        }
+
+        //boletins administração
+        if (isset($adminnewsmodule)) {
+          echo($adminnewsmodule);       
+        }
+
+        //aniversários
+        if (isset($birthdaymodule)) {
           echo($birthdaymodule);       
         }
     	?>

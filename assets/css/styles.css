@@ -106,3 +106,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', end
   cursor: pointer;
   background-color: #D1DED8;
 }
+
+.unsolved_calls:hover{
+  cursor: pointer;
+  background-color: #FFE4E1;
+}
+
+.solved_calls:hover{
+  cursor: pointer;
+  background-color: #D1DED8;
+}

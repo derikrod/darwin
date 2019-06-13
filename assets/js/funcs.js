@@ -1,8 +1,15 @@
 $(function () {
-	/*remover dados*/
+	/*adicionar classes nas tabelas*/
 			$("#user_hours_div>table>tbody>tr").each(function() {
 				$(this).addClass('pdf_hours');
 			});
+			$("#admin_unsolvedcalls_div>table>tbody>tr").each(function() {
+				$(this).addClass('unsolved_calls');
+			});
+			$("#admin_solvedcalls_div>table>tbody>tr").each(function() {
+				$(this).addClass('solved_calls');
+			});
+
 	//login
 	$('#login_form').on('submit', function(event) {
 		event.preventDefault();
@@ -624,6 +631,73 @@ $(function () {
 		
 	});
 	/*ti*/
+
+	$(".unsolved_calls").click(function () {
+		$.ajax({
+			url: $(this).data('path')+'/calls/getupdatestatus/'+$(this).data('id'),
+			type: 'post',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Chamados");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+			$("#updatecallstatus_form").submit(function(event) {
+				event.preventDefault();
+				$.ajax({
+					url: $(this).data('path')+"/calls/updatestatus",
+					type: 'post',
+					dataType: 'json',
+					data: $('#updatecallstatus_form').serialize(),
+				})
+				.done(function(data) {
+					
+					if (data.success == 0) {
+						$(".modal-title").html("Chamados");
+						$(".modal-body").html('<p>Dados alterados</p><button type="button" class="btn btn-success reload-btn">Recarregar Página</button>');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	})
+
+	$('.solved_calls').click(function () {
+		$.ajax({
+			url: $(this).data('path')+'/calls/getsolution/'+$(this).data('id'),
+			type: 'post',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Chamados");
+			$(".modal-body").html(data.solution);
+			$("#mymodal").modal();
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	})
 });
 
 //auxiliares

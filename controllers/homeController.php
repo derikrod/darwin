@@ -10,6 +10,7 @@
 			$b = new Birthday();
 			$cont = new Contact();
 			$cll = new Call();
+			$n = new News();
 
 			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
 				$dados =  array();
@@ -27,6 +28,8 @@
 				$dados["contactmodule"] = $cont-> loadContactModule(8,$_COOKIE["intra_user"]);
 				$dados["callsmodule"] = $cll-> loadCallsModule(9,$_COOKIE["intra_user"]);
 				$dados["admincallsmodule"] = $cll-> loadAdminCallsModule(10,$_COOKIE["intra_user"]);
+				$dados["newsmodule"] = $n-> loadNewsModule(11,$_COOKIE["intra_user"]);
+				$dados["adminnewsmodule"] = $n-> loadAdminNewsModule(12,$_COOKIE["intra_user"]);
 				$this->loadTemplate('main',$dados);
 			}else{
 				$dados = array(

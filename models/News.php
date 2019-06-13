@@ -12,6 +12,8 @@
 			foreach ($this->result() as $key => $value) {
 				$last = "<b>Ultimo boletim:</b> <a href=news/".$value['fle_file'].">".$value["txt_name"]."</a>";
 			}
+
+			return $last;
 		}
 
 		function newsTable(){
@@ -36,8 +38,7 @@
 										<div class="module-buttons">
 											<p><b>Boletim</b></p>
 											<p>'.$this-> getLastNews().'</p><p>&nbsp;</p>
-											<p>&nbsp;</p>
-											<p class="text-right"><a href="'.BASE_URL.'/news" class="btn btn-success">Boletins</a>
+											<p class="text-right"><a href="'.BASE_URL.'/news" class="btn btn-success">Boletins</a></p>
 										</div>
 									</div>							
 									</div>
@@ -65,9 +66,9 @@
 										
 										<div class="module-buttons">
 											<p><b>Boletim (Administração)</b></p>
-											<p>'.$this-> getLastNews().'</p><p>&nbsp;</p>
+											<p>'.$this-> getLastNews().'</p>
 											<p>&nbsp;</p>
-											<p class="text-right"><a href="'.BASE_URL.'/news/admin" class="btn btn-success">Boletins</a>
+											<p class="text-right"><a href="#" id="new_news" class="btn btn-primary">NOVO BOLETIM</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/news/admin" class="btn btn-success">Boletins</a></p>
 										</div>
 									</div>							
 									</div>

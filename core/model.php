@@ -74,7 +74,10 @@ class model{
 
 		}
 	}
-
+	public function generateLink($link,$name)
+	{
+		return '<a href="'.$link.'">'.$name.'</a>';
+	}
 
 
 	public function ptBRdate($date)

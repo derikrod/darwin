@@ -114,7 +114,8 @@ $(function () {
 			$("#div_sel_bhstatus").html("");
 			$("#btn_hours_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary aprove-btn"  value="APROVAR" data-path="'+$("#update_hours").data('path')+'"data-id="'+$("#update_hours").data('id')+'">');
 			$("#btn_lates_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary pay-hours-btn"  value="USAR HORAS" data-toggle="tooltip" data-placement="bottom" title="Horas extas do colaborador: '+data.hours+' Horas" data-path="'+$("#update_lates").data('path')+'"data-id="'+$("#update_lates").data('id')+'">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-warning pay-money-btn"  value="DESCONTAR" data-path="'+$("#update_lates").data('path')+'"data-id="'+$("#update_lates").data('id')+'">');
-			$('[data-toggle="tooltip"]').tooltip()
+			$('[data-toggle="tooltip"]').tooltip();
+			$('#btn_news_form').append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary update-news-file" value="ATERAR ARQUIVO" data-path="'+$("#update_news").data('path')+'" data-id="'+$("#update_news").data('id')+'">')
 			/*remover dados*/
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
@@ -146,7 +147,58 @@ $(function () {
 					});
 
 			});
-			
+
+			/*uploads de boletins*/
+			$(".update-news-file").click(function(event) {
+				$.ajax({
+					url: $(this).data('path')+"/news/fileuploader/"+$(this).data('id'),
+					type: 'post',
+					dataType: 'json',
+				})
+				.done(function(data) {
+					$(".modal-title").html("Alterar Arquivo");
+					$(".modal-body").html(data.form);
+					$("#mymodal").modal();
+
+					$("#newsfile_form").submit(function(event) {
+						/* Act on the event */
+						event.preventDefault();
+						var form = $("#newsfile_form")[0];
+						var myform = new FormData(form);
+						
+						$.ajax({
+							url: $(this).data('path')+"/news/upgradefile/",
+							type: 'post',
+							data: myform,
+							contentType: false,
+							processData:false
+						})
+						.done(function(msg) {
+							$(".modal-title").html("Alterar Arquivo");
+							$(".modal-body").html(msg);
+							$("#mymodal").modal();
+							$(".reload-btn").click(function(event) {
+								window.location.reload();
+							});
+						})
+						.fail(function() {
+							console.log("error");
+						})
+						.always(function() {
+							console.log("complete");
+						});
+						
+					});
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+				
 			/*aprovar horas extras*/
 			$('.aprove-btn').click(function function_name() {
 				$(".modal-title").html("Aprovar Horas");
@@ -291,6 +343,7 @@ $(function () {
 			console.log("complete");
 		});	
 
+		
 	});
 
 	/*atualizar dados*/
@@ -698,6 +751,57 @@ $(function () {
 		});
 		
 	})
+
+	$("#new_news").click(function(event) {
+		$.ajax({
+			url: $(this).data('path')+'/news/getform',
+			type: 'post',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Novo Boletim");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+
+			$("#add_news").submit(function(event) {
+				/* Act on the event */
+				$("#btn_news_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
+				event.preventDefault();
+				var form = $("#add_news")[0];
+				var myform = new FormData(form);
+				
+				$.ajax({
+					url: $(this).data('path')+"/news/add",
+					type: 'post',
+					data: myform,
+					contentType: false,
+					processData:false
+				})
+				.done(function(msg) {
+					$(".modal-title").html("Novo Boletim");
+					$(".modal-body").html(msg);
+					$("#mymodal").modal();
+					$(".reload-btn").click(function(event) {
+						window.location.reload();
+					});
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+	});
+
 });
 
 //auxiliares

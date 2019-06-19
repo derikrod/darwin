@@ -95,6 +95,14 @@
           echo($adminnewsmodule);       
         }
 
+         //manual de conduta
+        if (isset($manualsmodule)) {
+          echo($manualsmodule);       
+        }
+          //fotos
+        if (isset($gallerymodule)) {
+          echo($gallerymodule);       
+        }
         //aniversários
         if (isset($birthdaymodule)) {
           echo($birthdaymodule);       

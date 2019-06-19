@@ -22,7 +22,13 @@ class model{
 	public function numRows() {
 		return $this->numRows;
 	}
-
+	public function upload($files,$dir)
+	{	
+		if (count($files)>0) {
+			move_uploaded_file($files['tmp_name'], $dir."/".$files['name']);
+			return $dir."/".$files['name'];
+		}
+	}
 	public function insert($table, $data) {
 		if(!empty($table) && ( is_array($data) && count($data) > 0 )) {
 			$sql = "INSERT INTO ".$table." SET ";
@@ -74,9 +80,10 @@ class model{
 
 		}
 	}
-	public function generateLink($link,$name)
-	{
-		return '<a href="'.$link.'">'.$name.'</a>';
+	public function generateLink($link)
+	{	
+		$linksplit = explode('/', $link);
+		return '<a href="'.BASE_URL."/".$link.'" target="_blank">'.end($linksplit).'</a>';
 	}
 
 
@@ -332,7 +339,7 @@ class model{
 			return false;
 		}
 	}
-	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true,$exclude = array(),$operator = '=')
+	public function createTable($table_name,$condition = array(),$where_cond = 'AND',$editable = true,$exclude = array(),$operator = '=',$order ="")
 	{
 		$table = "";
 		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table_name."';";
@@ -355,7 +362,7 @@ class model{
 			}
 			$conditional = 'WHERE '.implode(' '.$where_cond.' ', $condition);
 		}
-		$sql = "SELECT * FROM ".$table_name." ".$conditional;
+		$sql = "SELECT * FROM ".$table_name." ".$conditional." ".$order;
 		$this-> query($sql);
 		$res = array();
 		$i=0;
@@ -378,6 +385,8 @@ class model{
 					 	$table .= "<td>".$this->get_options($key,$value) ."</td>";
 					}elseif (substr($key,0, 3) == 'dat') {
 						$table .= "<td>".$this->ptBRdate($value)."</td>";
+					}elseif (substr($key,0, 3) == 'fle'){
+						$table .= "<td>".$this->generateLink($value)."</td>";
 					}else{
 						$table .= "<td>".$value."</td>";
 					}

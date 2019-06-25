@@ -103,6 +103,11 @@
         if (isset($gallerymodule)) {
           echo($gallerymodule);       
         }
+
+        //sugestões suggestionmodule
+        if (isset($suggestionmodule)) {
+          echo($suggestionmodule);       
+        }
         //aniversários
         if (isset($birthdaymodule)) {
           echo($birthdaymodule);       

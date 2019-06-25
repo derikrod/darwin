@@ -7,7 +7,7 @@
  	
  	public function getBirthdays($month)
  	{
- 		$this ->query('SELECT txt_name,MONTH(dat_birthdadte)AS month,DAY(dat_birthdadte)AS day FROM `users` WHERE MONTH(dat_birthdadte) ='.$month);
+ 		$this ->query('SELECT txt_name,MONTH(dat_birthdate)AS month,DAY(dat_birthdate)AS day FROM `users` WHERE MONTH(dat_birthdate) ='.$month);
  		$birthdays = '<div style="width:100%;height:150px;overflow-y:scroll;margin-bottom:10px">';
  		foreach ($this->result() as $key => $value) {
  			$birthdays .='<p style="font-size:18px;"><b class="text-left">'.$value['txt_name'].'</b> &nbsp;&nbsp;&nbsp;&nbsp;'.$value['day'].'/'.$value['month'].'</p>';

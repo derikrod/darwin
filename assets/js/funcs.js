@@ -802,6 +802,27 @@ $(function () {
 		});
 	});
 
+	$("#newsuggestion_btn").click(function(event) {
+		/* Act on the event */
+		$.ajax({
+			url: 'suggestions/getForm/'+$(this).data('id'),
+			type: 'POST',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Nova sugestão");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+
 });
 
 //auxiliares

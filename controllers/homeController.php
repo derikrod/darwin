@@ -13,6 +13,7 @@
 			$n = new News();
 			$m = new Manuals();
 			$g = new Gallery();
+			$su = new Suggestion();
 
 			if (isset($_COOKIE["intra_user"])&& !empty($_COOKIE["intra_user"])) {
 				$dados =  array();
@@ -34,6 +35,7 @@
 				$dados["adminnewsmodule"] = $n-> loadAdminNewsModule(12,$_COOKIE["intra_user"]);
 				$dados["manualsmodule"] = $m-> loadManualsModule(13,$_COOKIE["intra_user"]);
 				$dados["gallerymodule"] = $g-> loadGalleryModule(14,$_COOKIE["intra_user"]);
+				$dados["suggestionmodule"] = $su-> loadSuggestionModule(15,$_COOKIE["intra_user"]);
 				$this->loadTemplate('main',$dados);
 			}else{
 				$dados = array(

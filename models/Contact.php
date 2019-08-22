@@ -17,7 +17,7 @@ class Contact extends model
 	public function contactTable()
 	{
 		return '<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
-									<div class="col-xs-12 module-div"><h3 class="text-center">Lista de Contatos</h3>'.$this->createTable('users',array(),'AND',false,array('txt_login','psw_pass','sel_companies','sel_departments','sel_users','txt_title','dat_birthdadte','hrs_hours','hrs_negativehours','non_grant')).'
+									<div class="col-xs-12 module-div"><h3 class="text-center">Lista de Contatos</h3>'.$this->createTable('users',array(),'AND',false,array('txt_login','psw_pass','sel_companies','sel_departments','sel_users','txt_title','dat_birthdate','hrs_hours','hrs_negativehours','non_grant')).'
 									</div>
 							  </div>';
 	}
@@ -36,7 +36,7 @@ class Contact extends model
                   <div class="row">
                     
                     <div class="module-buttons">
-                      <p><b>Procurar Contato (Lista de Ramais)</b></p>
+                      <p class="module-title"><b>Procurar Contato (Lista de Ramais)</b></p>
                      <form action="" id="contact_form" style="margin-top:14px;margin-bottom:8px;" data-path="'.BASE_URL.'">
 											<div class="form-group"><input type="text" id="txt_name" name="txt_name" required class="form-control" placeholder="Nome do colaborador"></div>
 											

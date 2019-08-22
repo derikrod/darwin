@@ -19,7 +19,7 @@
 			}else{
 				$usermodule = '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 									<div class="col-xs-12 module-div">
-										<br><h3>Eventos</h3><br>
+										<br><h3 class="module-title">Eventos</h3><br>
 										'.$html.'						
 									</div>
 							  </div>';

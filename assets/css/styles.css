@@ -35,24 +35,22 @@
 
 .module-div{
   background-color:#F8FBF7;
-  box-shadow: 3px 3px 3px #222;
   min-height: 250px;
   margin-top: 10px;
   margin-bottom: 10px; 
 }
 .mymodule{
-  box-shadow: 3px 3px 3px #222;
- margin-top: 10px;
+  margin-top: 10px;
   margin-bottom: 10px;
   padding: 0;
 }
 .navbar-default {
    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#172a3a+0,53679b+100 */
-background: #172a3a; /* Old browsers */
-background: -moz-linear-gradient(left,  #172a3a 0%, #53679b 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(left,  #172a3a 0%,#53679b 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to right,  #172a3a 0%,#53679b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', endColorstr='#53679b',GradientType=1 ); /* IE6-9 */
+  background: #172a3a; /* Old browsers */
+  background: -moz-linear-gradient(left,  #172a3a 0%, #53679b 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left,  #172a3a 0%,#53679b 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right,  #172a3a 0%,#53679b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', endColorstr='#53679b',GradientType=1 ); /* IE6-9 */
 
     border:0;
     color:#F0F7EE!important;
@@ -62,7 +60,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', end
     color:#F0F7EE!important;
 }
 .module-card{
-  height: 170px;
+  height: 180px;
 }
 
 .module-card> img{
@@ -78,6 +76,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', end
   background-color: #89C26C!important;
   border:0 !important;
   text-transform: uppercase;
+}
+.module-title{
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .btn-danger{
@@ -113,6 +116,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#172a3a', end
 }
 
 .solved_calls:hover{
+  cursor: pointer;
+  background-color: #D1DED8;
+}
+
+.unsolved_calls2:hover{
+  cursor: pointer;
+  background-color: #FFE4E1;
+}
+
+.solved_calls2:hover{
   cursor: pointer;
   background-color: #D1DED8;
 }

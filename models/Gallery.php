@@ -20,9 +20,9 @@ class Gallery extends model
 									<div class="row">
 										
 										<div class="module-buttons">
-											<p><b> Galeria de fotos</b></p>
+											<p class="module-title"><b> Galeria de fotos</b></p>
 											<p>Fotos dos eventos da empresa.</p><p>&nbsp;</p>
-											<p class="text-right"><a href="'.BASE_URL.'/galeria" class=" btn btn-success" target="blank">GALERIA DE FOTOS</a></p>
+											<p class="text-right"><a href="'.BASE_URL.'/galeriadefotos" class=" btn btn-success" target="blank">GALERIA DE FOTOS</a></p>
 										</div>
 									</div>							
 									</div>

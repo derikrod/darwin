@@ -9,6 +9,16 @@ $(function () {
 			$("#admin_solvedcalls_div>table>tbody>tr").each(function() {
 				$(this).addClass('solved_calls');
 			});
+			$("#admin_unsolvedcalls2_div>table>tbody>tr").each(function() {
+				$(this).addClass('unsolved_calls2');
+			});
+			$("#admin_solvedcalls2_div>table>tbody>tr").each(function() {
+				$(this).addClass('solved_calls2');
+			});
+
+			$("#admin_suggestions_div>table>tbody>tr").each(function() {
+				$(this).addClass('suggestion_line');
+			});
 
 	//login
 	$('#login_form').on('submit', function(event) {
@@ -115,7 +125,8 @@ $(function () {
 			$("#btn_hours_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary aprove-btn"  value="APROVAR" data-path="'+$("#update_hours").data('path')+'"data-id="'+$("#update_hours").data('id')+'">');
 			$("#btn_lates_form").append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary pay-hours-btn"  value="USAR HORAS" data-toggle="tooltip" data-placement="bottom" title="Horas extas do colaborador: '+data.hours+' Horas" data-path="'+$("#update_lates").data('path')+'"data-id="'+$("#update_lates").data('id')+'">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-warning pay-money-btn"  value="DESCONTAR" data-path="'+$("#update_lates").data('path')+'"data-id="'+$("#update_lates").data('id')+'">');
 			$('[data-toggle="tooltip"]').tooltip();
-			$('#btn_news_form').append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary update-news-file" value="ATERAR ARQUIVO" data-path="'+$("#update_news").data('path')+'" data-id="'+$("#update_news").data('id')+'">')
+			$('#btn_news_form').append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary update-news-file" value="ATERAR ARQUIVO" data-path="'+$("#update_news").data('path')+'" data-id="'+$("#update_news").data('id')+'">');
+			$('#btn_news2_form').append('&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-primary update-news2-file" value="ATERAR ARQUIVO" data-path="'+$("#update_news2").data('path')+'" data-id="'+$("#update_news2").data('id')+'">');
 			/*remover dados*/
 			$('#remove_btn').click(function () {
 					$(".modal-title").html("Excluir dados");
@@ -168,6 +179,57 @@ $(function () {
 						
 						$.ajax({
 							url: $(this).data('path')+"/news/upgradefile/",
+							type: 'post',
+							data: myform,
+							contentType: false,
+							processData:false
+						})
+						.done(function(msg) {
+							$(".modal-title").html("Alterar Arquivo");
+							$(".modal-body").html(msg);
+							$("#mymodal").modal();
+							$(".reload-btn").click(function(event) {
+								window.location.reload();
+							});
+						})
+						.fail(function() {
+							console.log("error");
+						})
+						.always(function() {
+							console.log("complete");
+						});
+						
+					});
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+
+			/*uploads de boletins indaiatuba*/
+			$(".update-news2-file").click(function(event) {
+				$.ajax({
+					url: $(this).data('path')+"/news2/fileuploader/"+$(this).data('id'),
+					type: 'post',
+					dataType: 'json',
+				})
+				.done(function(data) {
+					$(".modal-title").html("Alterar Arquivo");
+					$(".modal-body").html(data.form);
+					$("#mymodal").modal();
+
+					$("#news2file_form").submit(function(event) {
+						/* Act on the event */
+						event.preventDefault();
+						var form = $("#news2file_form")[0];
+						var myform = new FormData(form);
+						
+						$.ajax({
+							url: $(this).data('path')+"/news2/upgradefile/",
 							type: 'post',
 							data: myform,
 							contentType: false,
@@ -685,6 +747,54 @@ $(function () {
 	});
 	/*ti*/
 
+	/*ti indaiatuba*/
+	$("#newcall2_btn").click(function(event) {
+		$.ajax({
+			url: $(this).data('path')+'/calls2/getuserform/'+$(this).data('id'),
+			type: 'post',
+			dataType: 'json'
+		})
+		.done(function(data) {
+			$(".modal-title").html("Novo Chamado");
+			$(".modal-body").html(data.form);
+			$("#div_lgt_resolution").hide();
+			$("#mymodal").modal();
+			$("#add_calls2").submit(function(event) {
+				event.preventDefault();
+				$("#btn_calls2_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
+				$.ajax({
+					url: $(this).data('path')+"/calls2/add",
+					type: 'post',
+					dataType: 'json',
+					data: $("#add_calls2").serialize(),
+				})
+				.done(function(data) {
+					$(".modal-title").html("Novo Chamado");
+						$(".modal-body").html('<p>Chamado cadastrado</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">&nbsp;&nbsp;<a href="'+data.path+'/calls" class="btn btn-primary">LISTA DE CHAMADOS</a>');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
+	/*ti indaiatuba*/
+
 	$(".unsolved_calls").click(function () {
 		$.ajax({
 			url: $(this).data('path')+'/calls/getupdatestatus/'+$(this).data('id'),
@@ -750,7 +860,74 @@ $(function () {
 			console.log("complete");
 		});
 		
+	});
+
+	$(".unsolved_calls2").click(function () {
+		$.ajax({
+			url: $(this).data('path')+'/calls2/getupdatestatus/'+$(this).data('id'),
+			type: 'post',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Chamados");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+			$("#updatecallstatus_form").submit(function(event) {
+				event.preventDefault();
+				$.ajax({
+					url: $(this).data('path')+"/calls2/updatestatus",
+					type: 'post',
+					dataType: 'json',
+					data: $('#updatecallstatus_form').serialize(),
+				})
+				.done(function(data) {
+					
+					if (data.success == 0) {
+						$(".modal-title").html("Chamados");
+						$(".modal-body").html('<p>Dados alterados</p><button type="button" class="btn btn-success reload-btn">Recarregar Página</button>');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
 	})
+
+	$('.solved_calls2').click(function () {
+		$.ajax({
+			url: $(this).data('path')+'/calls2/getsolution/'+$(this).data('id'),
+			type: 'post',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Chamados");
+			$(".modal-body").html(data.solution);
+			$("#mymodal").modal();
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+		
+	});
 
 	$("#new_news").click(function(event) {
 		$.ajax({
@@ -802,6 +979,56 @@ $(function () {
 		});
 	});
 
+	$("#new_news2").click(function(event) {
+		$.ajax({
+			url: $(this).data('path')+'/news2/getform',
+			type: 'post',
+			dataType: 'json',
+		})
+		.done(function(data) {
+			$(".modal-title").html("Novo Boletim");
+			$(".modal-body").html(data.form);
+			$("#mymodal").modal();
+
+			$("#add_news2").submit(function(event) {
+				/* Act on the event */
+				$("#btn_news_form").html('<img src="'+$(this).data('path')+'/assets/images/loading.gif" alt="" style="width:50px;" />');
+				event.preventDefault();
+				var form = $("#add_news2")[0];
+				var myform = new FormData(form);
+				
+				$.ajax({
+					url: $(this).data('path')+"/news2/add",
+					type: 'post',
+					data: myform,
+					contentType: false,
+					processData:false
+				})
+				.done(function(msg) {
+					$(".modal-title").html("Novo Boletim");
+					$(".modal-body").html(msg);
+					$("#mymodal").modal();
+					$(".reload-btn").click(function(event) {
+						window.location.reload();
+					});
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+	});
+
 	$("#newsuggestion_btn").click(function(event) {
 		/* Act on the event */
 		$.ajax({
@@ -813,6 +1040,40 @@ $(function () {
 			$(".modal-title").html("Nova sugestão");
 			$(".modal-body").html(data.form);
 			$("#mymodal").modal();
+			$("#add_suggestions").submit(function(event) {
+			/* Act on the event */
+			event.preventDefault();
+			$.ajax({
+				url: $(this).data('path')+'/suggestions/insert',
+				type: 'post',
+				dataType: 'json',
+				data:$("#add_suggestions").serialize() ,
+			})
+			.done(function(data) {
+				if (data.success == 1) {
+						$(".modal-title").html("Nova sugestão");
+						$(".modal-body").html('<p>Sugestão cadastrada com sucesso</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}else{
+						$(".modal-title").html("Nova sugestão");
+						$(".modal-body").html('<p>Ocorreu um erro ao cadastrar a Sugestão</p><input type="button" value="Recarregar página" class="btn btn-succes reload-btn">');
+						$("#mymodal").modal();
+						$(".reload-btn").click(function(event) {
+							window.location.reload();
+						});
+					}
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+		
+	});
 		})
 		.fail(function() {
 			console.log("error");
@@ -822,6 +1083,10 @@ $(function () {
 		});
 		
 	});
+	$("#suggestion_line").click(function(event) {
+		/* Act on the event */
+	});
+	
 
 });
 

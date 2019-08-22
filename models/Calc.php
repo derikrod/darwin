@@ -22,7 +22,7 @@
                   <div class="row">
                     
                     <div class="module-buttons">
-                      <p><b>Calculadora de produtos</b></p>
+                      <p class="module-title"><b>Calculadora de produtos</b></p>
                       <p>Calculadora de preço dos produto da equipe comercial.</p>
                       <p>&nbsp;</p>
                       <p class="text-right"><a href="#" id="showcalc" data-path="'.BASE_URL.'" class="btn btn-success">Calculadora</a>

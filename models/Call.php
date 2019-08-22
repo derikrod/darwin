@@ -6,7 +6,7 @@
 	{
 		public function getCall($id)
 		{
-			$description = 'Nenhum chamado aberto';
+			$description = '<p>Nenhum chamado aberto</p><p>&nbsp;</p>';
 			$status = '';
 			$this-> query('SELECT * FROM calls WHERE caller= '.$id.' ORDER BY id DESC LIMIT 1');
 
@@ -84,17 +84,17 @@
 
 		function getUserForm($iduser){
 			$form = $this-> createForm('calls','CADASTRAR',0,array('lgt_resolution' => "",'sponsor'=> 0,'caller'=> $iduser,'sel_callstatus'=>1,'dat_date'=>date('Y-m-d H:i:s')));
-			return $form;
+			return utf8_encode($form);
 		}
 		//loaduserModule
 		public function loadCallsModule($idmodule,$iduser)
 	 	{
-	 		$hoursmodule = "";
+	 		$callsmodule = "";
 		
-				if (!$this->check_modules($idmodule,$iduser)) {
-					return $contactmodule;
+				if (!$this->check_modules($idmodule,$iduser) || $this->getCity($iduser) !=1) {
+					return $callsmodule;
 				}else{
-					$contactmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					$callsmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                   <div class="col-xs-12 mymodule">
                   <div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/calls.png\');background-position:center center;background-size:cover;">
                         
@@ -102,16 +102,15 @@
                   <div class="row">
                     
                     <div class="module-buttons">
-                      <p><b>Chamados da TI</b></p>
+                      <p class="module-title"><b>Chamados da TI</b></p>
                       '.$this-> getCall($iduser).'
                       <p class="text-right"><a href="'.BASE_URL.'/calls" class="btn btn-success">Lista de chamados</a> &nbsp;&nbsp;<a href="#"  id="newcall_btn" class="btn btn-primary" data-path="'.BASE_URL.'" data-id="'.$iduser.'">NOVO CHAMADO</a></p>
 										</div>
                     </div>
                   </div>              
-                  </div>
-                </div>';
+                  </div>';
 
-					return $contactmodule;
+					return $callsmodule;
 				}
 	 	}
 
@@ -121,25 +120,25 @@
 	 	{
 	 		$callsmodule = "";
 		
-				if (!$this->check_modules($idmodule,$iduser)) {
+				if (!$this->check_modules($idmodule,$iduser) || $this-> getCity($iduser) != 1) {
 					return $callsmodule;
 				}else{
-					$callsmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					$callsmodule = '
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                   <div class="col-xs-12 mymodule">
-                  <div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/admincalls.png\');background-position:center center;background-size:cover;">
-                        
-                  </div>
+                  	<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/admincalls.png\');background-position:center center;background-size:cover;">                        
+                  	</div>
                   <div class="row">
                     
                     <div class="module-buttons">
-                      <p><b>Chamados da TI (Administração)</b></p>
+                      <p class="module-title"><b>Chamados da TI (Administração)</b></p>
                       '.$this-> getAdminCall().'
                       <p class="text-right"><a href="'.BASE_URL.'/calls/admin/1" class="btn btn-success">CHAMADOS</a>
-										<a href="'.BASE_URL.'/calls/admin/2" class="btn btn-primary">BIBLIOTECA</a></div>
+										<a href="'.BASE_URL.'/calls/admin/2" class="btn btn-primary">HISTÓRICO</a></div>
                     </div>
                   </div>              
                   </div>
-                </div>';
+                ';
 
 					return $callsmodule;
 				}
@@ -181,6 +180,7 @@
 	 		return $form;
 
 	 	}
+
 
 	 	public function setUpdateStatus($data)
 	 	{	$data['sponsor'] = $this-> getUserName($_COOKIE['intra_user']);

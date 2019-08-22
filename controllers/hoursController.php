@@ -60,7 +60,8 @@
 		}
 		public function updateForm($id){
 			$h = new Hours();
-			echo json_encode(array('form' =>$h-> getUpdateHourForm($id)));
+			$form = $h-> getUpdateHourForm($id);
+			echo json_encode(array('form' =>$form));
 		}
 
 		public function getuseraddform($id)

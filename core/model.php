@@ -85,7 +85,15 @@ class model{
 		$linksplit = explode('/', $link);
 		return '<a href="'.BASE_URL."/".$link.'" target="_blank">'.end($linksplit).'</a>';
 	}
-
+	public function getGrant($iduser)
+	{
+		$this-> query("SELECT * FROM users WHERE id =".$iduser." AND non_grant <> '0'");
+		if ($this-> numRows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	public function ptBRdate($date)
 	{
@@ -107,14 +115,14 @@ class model{
 	//1.selects
 	private function get_select($table,$key,$required="",$selected = 0)
 	{
-		$this -> query("SELECT * FROM ".$table);
-		$select = '<select name="'.$key.'" id="'.$key.'" '.$required.' class="form-control"><option value="">Selecione uma opção.</option>';
+		$this -> query("SELECT * FROM ".$table." WHERE visible = 0");
+		$select = '<select name="'.$key.'" id="'.$key.'" '.$required.' class="form-control"><option value="">Selecione...</option>';
 		foreach ($this->result() as $key => $value) {
 			$selected_input ="";
 			if ($value['id'] == $selected) {
 				$selected_input = 'selected = "selected"';
 			}
-			$select .= 	'<option value="'.$value['id'].'" '.$selected_input.'>'.utf8_encode($value['txt_name']).'</option>';
+			$select .= 	'<option value="'.$value['id'].'" '.$selected_input.'>'.$value['txt_name'].'</option>';
 		}
 
 		$select.='</select>';
@@ -222,7 +230,7 @@ class model{
 				}
 				$split_key = explode('_', $value['COLUMN_NAME']);
 				if ($value['COLUMN_NAME'] != 'id' && $split_key[0] != 'non' && !in_array($value['COLUMN_NAME'], $exclude)) {
-					$form .= '<div class="form-group" id="div_'.$value["COLUMN_NAME"].'"><label for="'.$value['COLUMN_NAME'].'">'.utf8_encode($value['COLUMN_COMMENT']).'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
+					$form .= '<div class="form-group" id="div_'.$value["COLUMN_NAME"].'"><label for="'.$value['COLUMN_NAME'].'">'.$value['COLUMN_COMMENT'].'</label>'.$this->get_input($split_key[0],$value['COLUMN_NAME'],$required).'</div>';
 				}	
 			}
 			
@@ -251,7 +259,7 @@ class model{
 				 		if ($res[0]['IS_NULLABLE'] == 'NO') {
 				 			$required = "required";
 				 		}
-				 		$form .= '<div class="form-group" id="div_'.$key.'"><label for="'.$key.'">'.utf8_encode($res[0][0]).'</label>'.$this->get_input(substr($key, 0,3),$key,$required,$value).'</div>';
+				 		$form .= '<div class="form-group" id="div_'.$key.'"><label for="'.$key.'">'.$res[0][0].'</label>'.$this->get_input(substr($key, 0,3),$key,$required,$value).'</div>';
 				 		
 				 }
 				
@@ -274,7 +282,7 @@ class model{
 
 		$sql_fields = implode(' OR ', $fields);
 
-		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'darwin' AND TABLE_NAME = '".$table."' AND (".$sql_fields.")";
+		$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".DB_NAME."' AND TABLE_NAME = '".$table."' AND (".$sql_fields.")";
 
 		$this -> query($sql);
 		if (count($hiddens) > 0) {
@@ -325,7 +333,7 @@ class model{
 		$option = "";
 		$this -> query($sql);
 		foreach ($this->result() as $key => $value) {
-			$option = $value["txt_name"];
+			$option = utf8_decode($value["txt_name"]);
 		}
 
 		return utf8_encode($option);
@@ -348,7 +356,7 @@ class model{
 	 
 		foreach ($this->result() as $key => $value) {
 			if ($value['COLUMN_COMMENT'] != ""  && substr($value['COLUMN_NAME'],0, 3)!='psw' && !$this->isexclude($exclude,$value['COLUMN_NAME'])) {
-				$table .=  '<th>'.utf8_encode($value['COLUMN_COMMENT']).'</th>';
+				$table .=  '<th>'.$value['COLUMN_COMMENT'].'</th>';
 			}	
 		}
 
@@ -380,7 +388,7 @@ class model{
 			}
 			
 			foreach ($intraarray as $key => $value) {
-				if (!is_numeric($key) && $key != 'id' && substr($key,0, 3)!='non'  && substr($key,0, 3)!='psw' && !$this->isexclude($exclude,$key)) {
+				if (!is_numeric($key) && $key != 'id' && $key != 'visible' && substr($key,0, 3)!='non'  && substr($key,0, 3)!='psw' && !$this->isexclude($exclude,$key)) {
 					if (substr($key,0, 3) == 'sel') {
 					 	$table .= "<td>".$this->get_options($key,$value) ."</td>";
 					}elseif (substr($key,0, 3) == 'dat') {
@@ -423,6 +431,29 @@ class model{
 		}else{
 			return false;
 		}
+	}
+
+
+	public function checkGrant($iduser)
+	{
+		$sql = "SELECT * FROM users WHERE id =".$id." AND non_grant <> 0;";
+		$this-> query($sql);
+		if ($this->numRows()>0){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
+
+	public function getCity($iduser)
+	{
+		$this->query('SELECT * FROM users WHERE id = '.$iduser);
+		$city = 0;
+		foreach ($this->result() as $key => $value) {
+			$city = $value['sel_cities'];
+		}
+		return $city;
 	}
 	
 }

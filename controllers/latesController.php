@@ -2,7 +2,7 @@
 	/**
 	  * 
 	  */
-	 class latesController extends Controller
+	 class latesController extends controller
 	 {
 	 	
 	 	public function index()

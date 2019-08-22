@@ -2,7 +2,7 @@
 	/**
 	 * Classe respnsável por controlar os atrasos
 	 */
-	class Late extends Model
+	class Late extends model
 	{
 		
 

@@ -68,11 +68,15 @@
 			$this-> insert('users',$data);
 			return true;
 		}
+
+		
+
+		
 		//read
 		public function loadUserTable(){
-			$user_table = '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			$user_table = '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ">
 			
-										<div class="col-xs-12 module-div"><h3 class="text-center">Lista de usuários <a href="#" id="add_user_btn" data-path="'.BASE_URL.'"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></h3>'.$this -> createTable('users').'</div>
+										<div class="col-xs-12 module-div" style="overflow-x:scroll;><h3 class="text-center">Lista de usuários <a href="#" id="add_user_btn" data-path="'.BASE_URL.'"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></h3>'.$this -> createTable('users').'</div>
 								  </div>';
 			return $user_table;
 		}
@@ -105,7 +109,7 @@
 									<div class="row">
 										
 										<div class="module-buttons">
-											<p><b>Usuários</b></p>
+											<p class="module-title"><b>Usuários</b></p>
 											<p><b>Número de usuários cadastrados: </b> '.$this-> count_users().'</p>
 											<p>&nbsp;</p>
 											<p class="text-right"><a href="'.BASE_URL.'/users" class="btn btn-success">Lista de usuários</a></p>

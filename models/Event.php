@@ -90,7 +90,7 @@
 			}else{
 				$eventmodule = '<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="col-xs-12 module-div">
-										<br><h3>Eventos</h3><br>
+										<br><h3 class="module-title">Eventos</h3><br>
 										<p><b>Eventos em aberto: </b> '.$this-> count_events($iduser).'</p>
 										<br>
 										<hr>

@@ -27,7 +27,7 @@
 		public function getuserform($iduser)
 		{
 			$cll = new Call();
-			echo json_encode(array('form' => $cll-> getUserForm($iduser)));
+			echo json_encode(array('form'=>$cll-> getUserForm($iduser)));
 		}
 		public function updateForm($id){
 			$cll = new Call();

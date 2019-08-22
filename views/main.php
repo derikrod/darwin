@@ -44,15 +44,58 @@
   		  if (isset($trellomodule)) {
           echo($trellomodule);       
         }
+         //aniversários
+        if (isset($birthdaymodule)) {
+          echo($birthdaymodule);       
+        }
 
         //usuários
         if (isset($usermodule)) {
     			echo($usermodule);    		
     		}
+        
 
+         //ramais      
+        if (isset($contactmodule)) {
+          echo($contactmodule);       
+        }
+
+         //boletins
+        if (isset($newsmodule)) {
+          echo($newsmodule);       
+        }
+
+        //boletins administração
+        if (isset($adminnewsmodule)) {
+          echo($adminnewsmodule);       
+        }
+
+         //boletins indaiatuba
+        if (isset($news2module)) {
+          echo($news2module);       
+        }
+
+        //boletins indaiatuba administração
+        if (isset($adminnews2module)) {
+          echo($adminnews2module);       
+        }
+
+          //fotos
+        if (isset($gallerymodule)) {
+          echo($gallerymodule);       
+        }
+          
         // eventos
         if (isset($eventmodule)) {
           echo($eventmodule);       
+        }
+         //calculadora
+        if (isset($calcmodule)) {
+          echo($calcmodule);       
+        }
+        //manual de conduta
+        if (isset($manualsmodule)) {
+          echo($manualsmodule);       
         }
 
         // banco de horas
@@ -65,53 +108,39 @@
           echo($bhadmmodule);       
         }
 
-        //calculadora
-        if (isset($calcmodule)) {
-          echo($calcmodule);       
+         //banco de horas
+        if (isset($superhoursmodule)) {
+          echo($superhoursmodule);       
         }
-
-        //ramais      
-        if (isset($contactmodule)) {
-          echo($contactmodule);       
+        //chamados administração
+        if (isset($admincallsmodule)) {
+          echo($admincallsmodule);       
         }
-
         //chamados
         if (isset($callsmodule)) {
           echo($callsmodule);       
         }
 
-        //chamados administração
-        if (isset($admincallsmodule)) {
-          echo($admincallsmodule);       
+         //chamados administração indaiatuba
+        if (isset($admincalls2module)) {
+          echo($admincalls2module);       
         }
+        //chamados indaiatuba
+        if (isset($calls2module)) {
+          echo($calls2module);       
+        }
+        //sugestões 
+        // if (isset($suggestionmodule)) {
+        //   echo($suggestionmodule);       
+        // }
 
-        //boletins
-        if (isset($newsmodule)) {
-          echo($newsmodule);       
-        }
+        // //sugestão admin
+        // if (isset($suggestionadminmodule)) {
+        //   echo($suggestionadminmodule);       
+        // }
 
-        //boletins administração
-        if (isset($adminnewsmodule)) {
-          echo($adminnewsmodule);       
-        }
-
-         //manual de conduta
-        if (isset($manualsmodule)) {
-          echo($manualsmodule);       
-        }
-          //fotos
-        if (isset($gallerymodule)) {
-          echo($gallerymodule);       
-        }
-
-        //sugestões suggestionmodule
-        if (isset($suggestionmodule)) {
-          echo($suggestionmodule);       
-        }
-        //aniversários
-        if (isset($birthdaymodule)) {
-          echo($birthdaymodule);       
-        }
+        
+       
     	?>
     </div>
 		

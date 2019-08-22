@@ -95,19 +95,19 @@
 						$name = "Domingo";
 						break;
 					case 1:
-						$name = "Segunda Feira";
+						$name = "Segunda-Feira";
 						break;
 					case 2:
-						$name = "Terça Feira";
+						$name = "Terça-Feira";
 						break;		
 					case 3:
-						$name = "Quarta Feira";
+						$name = "Quarta-Feira";
 						break;
 					case 4:
-						$name = "Quinta Feira";
+						$name = "Quinta-Feira";
 						break;
 					case 5:
-						$name = "Sexta Feira";
+						$name = "Sexta-Feira";
 						break;
 					case 6:
 						$name = "Sábado";
@@ -309,7 +309,7 @@
 			# code...
 			$this-> query('SELECT * FROM users WHERE id ='.$id);
 			foreach ($this-> result() as $key => $value) {
-				$form = $this-> getSmForm(array('sel_bhtypes','hrs_hours','dat_hourdate','txt_motivation','txt_locale','lgt_desc'),'hours','Gerar Formulário','bh_pdf',array('sel_users'=> $id));
+				$form = $this-> getSmForm(array('sel_bhtypes','hrs_hours','dat_hourdate','txt_motivation','txt_locale','lgt_desc'),'hours','Gerar Documento','bh_pdf',array('sel_users'=> $id));
 				return $form;
 			}
 		}
@@ -318,7 +318,7 @@
 			$this ->query('SELECT * FROM bhtypes WHERE id ='.$type);
 			$type = "";
 			foreach ($this-> result() as $key => $value) {
-				$type = $value["txt_name"];
+				$type = utf8_decode($value["txt_name"]);
 			}
 			return $type;
 		}
@@ -390,7 +390,7 @@
 			$days = floor(intval($split[0])/8);
 			$hours = intval($split[0])%8;
 			$minutes = $split[1];
-
+			
 			return($days." Dias ".$hours." Horas e ".$minutes." Minutos");
 		}
 
@@ -410,8 +410,8 @@
 									<div class="row">
 										
 										<div class="module-buttons">
-											<p><b>Banco de horas</b></p>
-											<p><b>Horas extras</b> '.$this-> getPositiveHours($iduser).' ('.$this->hoursToDays($this-> getPositiveHours($iduser)).')</p>
+											<p class="module-title"><b>Banco de horas</b></p>
+											<p><b>Horas positivas</b> '.$this-> getPositiveHours($iduser).' ('.$this->hoursToDays($this-> getPositiveHours($iduser)).')</p>
 											<p><b>Horas negativas</b> '.$this-> getNegative($iduser).' ('.$this->hoursToDays($this-> getNegative($iduser)).')</p>
 											<p class="text-right"><a href="'.BASE_URL.'/hours" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates" class="btn btn-danger">Meus Atrasos</a></p>
 										</div>
@@ -424,7 +424,37 @@
 			}
 			
 		}
+		public function LoadSuperHoursModule($iduser)
+		{
+			$hoursmodule = "";
+	
+			if (!$this->getGrant($iduser)) {
+				return $hoursmodule;
+			}else{
+				$hoursmodule = '
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<div class="col-xs-12 mymodule">
+									<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/adminhours.png\');background-position:bottom right;background-size:cover;">
+												
+									</div>
+									<div class="row">
+										
+										<div class="module-buttons">
+											<p class="module-title"><b>Banco de horas (Gestores)</b></p>
+											<p>Administração do banco de horas dos colaboradores.</p>
+											<p>&nbsp;</p>
+											<p class="text-right"><a href="'.BASE_URL.'/hours/super " class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;
+										</div>
+									</div>							
+									</div>
+							  </div>
+							';
 
+				return $hoursmodule;
+			}
+		}
+		
+		
 		public function loadAdminHoursModule($idmodule,$iduser)
 		{
 			$hoursmodule = "";
@@ -441,7 +471,7 @@
 									<div class="row">
 										
 										<div class="module-buttons">
-											<p><b>Banco de horas (Administração)</b></p>
+											<p class="module-title"><b>Banco de horas (Administração)</b></p>
 											<p>Administração do banco de horas dos colaboradores.</p>
 											<p>&nbsp;</p>
 											<p class="text-right"><a href="'.BASE_URL.'/hours/admin" class="btn btn-success">Banco de horas</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/lates/admin" class="btn btn-danger">Cadastrar Atrasos</a></p>
@@ -454,6 +484,41 @@
 				return $hoursmodule;
 			}
 		}
+
+		private function getUserHours($iduser){
+			$this-> query('SELECT * FROM hours WHERE sel_users = '.$iduser);
+			return $this->result();
+		}
+		public function superHoursTable($iduser)
+		{
+			$this->query("SELECT * FROM users WHERE id =".$iduser);	
+			$table = '<table class="table" id="superhours_table"><thead><th>Colaborador</th><th>Horas positivas</th><th>Horas negativas</th></thead><tbody>';
+			foreach ($this->result() as $key => $value) {
+				$grant = $value['non_grant'];
+				$split = explode(',', $grant);
+				foreach ($split as $value) {
+					$this->query('SELECT * FROM users WHERE sel_companies ='.$value);
+					foreach ($this->result() as $key => $value) {
+						$table.= '<tr  class="inform-row" data-table="superhours" data-id="'.$value['id'].'" data-path="'.BASE_URL.'"><td>'.$value['txt_name'].'</td><td>'.$value['hrs_hours'].'</td><td>'.$values['hrs_negativehours'].'</td></tr>';
+					}
+				}
+			}
+			$table .= '</tbody></table>';
+			return $table;
+		}
+
+		public function listSuperHours($id)
+		{
+			$html = '<div class="row module-div">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><h3 class="text-center">Banco de Horas</h3><p class="text-center">Lista de horas </p>
+						<p class="text-center">
+						
+							'.$this-> superHoursTable($id).'
+						</div>
+					</div>';
+			return $html;
+		}
+
 	}
 
 ?>

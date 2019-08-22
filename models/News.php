@@ -10,7 +10,7 @@
 			$this-> query('SELECT * FROM news ORDER BY id  DESC LIMIT 1');
 			$last = "";
 			foreach ($this->result() as $key => $value) {
-				$last = "<b>Ultimo boletim:</b> <a href=".BASE_URL."/".$value['fle_file']." target=\"_blank\">".$value["txt_name"]."</a>";
+				$last = "<b>Último boletim:</b> <a href=".BASE_URL."/".$value['fle_file']." target=\"_blank\">".$value["txt_name"]."</a>";
 			}
 
 			return $last;
@@ -83,7 +83,7 @@
 		{
 			$newsmodule = "";
 	
-			if (!$this->check_modules($idmodule,$iduser)) {
+			if (!$this->check_modules($idmodule,$iduser) || $this-> getCity($iduser) != 1) {
 				return $newsmodule;
 			}else{
 				$newsmodule = '
@@ -95,7 +95,7 @@
 									<div class="row">
 										
 										<div class="module-buttons">
-											<p><b>Boletim (Administração)</b></p>
+											<p class="module-title"><b>Boletim (Administração)</b></p>
 											<p>'.$this-> getLastNews().'</p>
 											<p>&nbsp;</p>
 											<p class="text-right"><a href="#" id="new_news"  data-path="'.BASE_URL.'" class="btn btn-primary">NOVO BOLETIM</a>&nbsp;&nbsp;<a href="'.BASE_URL.'/news/admin" class="btn btn-success">Boletins</a></p>
@@ -113,7 +113,7 @@
 		{
 			$newsmodule = "";
 	
-			if (!$this->check_modules($idmodule,$iduser)) {
+			if (!$this->check_modules($idmodule,$iduser) || $this-> getCity($iduser) != 1) {
 				return $newsmodule;
 			}else{
 				$newsmodule = '
@@ -125,7 +125,7 @@
 									<div class="row">
 										
 										<div class="module-buttons">
-											<p><b>Boletim</b></p>
+											<p class="module-title"><b>Boletim</b></p>
 											<p>'.$this-> getLastNews().'</p><p>&nbsp;</p>
 											<p class="text-right"><a href="'.BASE_URL.'/news" class="btn btn-success">Boletins</a></p>
 										</div>

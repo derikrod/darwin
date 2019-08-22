@@ -10,7 +10,7 @@ class Manuals extends model
 			$company = $value['sel_companies'];
 		}
 
-		$link = '<a href="'.BASE_URL.'/assets/manals/'.$company.'.pdf" target="blank" class="btn btn-success">Munal de conduta</a>';
+		$link = '<a href="'.BASE_URL.'/assets/manuals/'.$company.'.pdf" target="blank" class="btn btn-success">Manual de conduta</a>';
 
 		return $link;
 	}
@@ -25,17 +25,17 @@ class Manuals extends model
 				$manualsmodule = '
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="col-xs-12 mymodule">
-									<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/manual.jpg\');background-position:bottom right;background-size:cover;">
-												
-									</div>
-									<div class="row">
-										
-										<div class="module-buttons">
-											<p><b> Manual de Conduta</b></p>
-											<p>Conheça melhor seus direitos e deveres dentro da empresa.</p><p>&nbsp;</p>
-											<p class="text-right">'.$this->manualLink($iduser).'</p>
+										<div class="row module-card" style="background-image:url(\''.BASE_URL.'/assets/images/manual.jpg\');background-position:bottom right;background-size:cover;">
+													
 										</div>
-									</div>							
+										<div class="row">
+											
+											<div class="module-buttons">
+												<p class="module-title"><b> Manual de Conduta</b></p>
+												<p>Conheça melhor seus direitos e deveres dentro da empresa.</p><p>&nbsp;</p>
+												<p class="text-right">'.$this->manualLink($iduser).'</p>
+											</div>
+										</div>							
 									</div>
 							  </div>
 							';

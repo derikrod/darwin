@@ -6,19 +6,19 @@
 	error_reporting(E_ALL);
 	$config = array();
 	if (ENVIRONMENT == 'development') {
-		define("BASE_URL", "http://localhost/darwin");
-		define("DB_NAME","u175549069_intr2");
+		define("BASE_URL", "");
+		define("DB_NAME","");
 		$config['dbname'] = DB_NAME;
-		$config['host']='sql158.main-hosting.eu';
-		$config['dbuser']='u175549069_intr2';
-		$config['dbpass'] ='Acore20663';
+		$config['host']='';
+		$config['dbuser']='';
+		$config['dbpass'] ='';
 	}else{
-		define("BASE_URL", "http://intranet.acoreconsumiveis.com.br");
-		define("DB_NAME","u175549069_intr2");
+		define("BASE_URL", "");
+		define("DB_NAME","");
 		$config['dbname'] = DB_NAME;
-		$config['host']='sql158.main-hosting.eu';
-		$config['dbuser']='u175549069_intr2';
-		$config['dbpass'] ='Acore20663';
+		$config['host']='';
+		$config['dbuser']='';
+		$config['dbpass'] ='';
 	}
 
 	global $db;
